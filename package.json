@@ -1,0 +1,25 @@
+{
+  "name": "osc-msg",
+  "description": "isomorphic OSC (Open Sound Control) message encoder/decoder",
+  "version": "0.0.0",
+  "author": "nao yonamine <mohayonao@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/mohayonao/osc-msg/issues"
+  },
+  "dependencies": {},
+  "files": [
+    "package.json",
+    "lib",
+    "README.md"
+  ],
+  "homepage": "http://mohayonao.github.io/osc-msg/",
+  "keywords": [
+    "osc"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mohayonao/osc-msg.git"
+  }
+}
