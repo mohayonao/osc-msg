@@ -1,12 +1,14 @@
 {
   "name": "osc-msg",
   "description": "isomorphic OSC (Open Sound Control) message encoder/decoder",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "nao yonamine <mohayonao@gmail.com>",
   "bugs": {
     "url": "https://github.com/mohayonao/osc-msg/issues"
   },
-  "dependencies": {},
+  "dependencies": {
+    "dataview2": "^0.1.0"
+  },
   "devDependencies": {
     "babel": "^5.2.6",
     "babel-eslint": "^3.0.1",
@@ -16,6 +18,7 @@
     "espower-babel": "^2.1.1",
     "isparta": "^3.0.3",
     "mocha": "^2.2.4",
+    "osc-min": "^0.2.0",
     "power-assert": "^0.11.0",
     "uglify-js": "^2.4.20"
   },
