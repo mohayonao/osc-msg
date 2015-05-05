@@ -1,11 +1,10 @@
-import Message from "./Message";
+import OSCElement from "./OSCElement";
+import OSCMessage from "./OSCMessage";
+import OSCBundle from "./OSCBundle";
 
 export default {
-  Message,
-  fromBuffer(buffer) {
-    return Message.fromBuffer(buffer).toObject();
-  },
-  toBuffer(obj) {
-    return Message.fromObject(obj).toBuffer();
-  },
+  OSCMessage,
+  OSCBundle,
+  fromBuffer: buffer => OSCElement.fromBuffer(buffer).toObject(),
+  toBuffer: obj => OSCElement.fromObject(obj).toBuffer(),
 };

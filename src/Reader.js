@@ -8,6 +8,17 @@ export default class Reader {
     this.index = 0;
   }
 
+  read(length) {
+    let buffer = new Buffer2(length);
+    let view = new DataView2(buffer);
+
+    for (let i = 0; i < length; i++) {
+      view.setUint8(i, this.readUInt8());
+    }
+
+    return buffer;
+  }
+
   readUInt8() {
     this.index += 1;
     return this.data.getUint8(this.index - 1);
@@ -43,7 +54,7 @@ export default class Reader {
     let result = "";
     let charCode;
 
-    while ((charCode = this.readUInt8()) !== 0x00) {
+    while (this.hasNext() && (charCode = this.readUInt8()) !== 0x00) {
       result += String.fromCharCode(charCode);
     }
     this.align();
@@ -53,12 +64,8 @@ export default class Reader {
 
   readBlob() {
     let length = this.readUInt32();
-    let buffer = new Buffer2(length);
-    let view = new DataView2(buffer);
+    let buffer = this.read(length);
 
-    for (let i = 0; i < length; i++) {
-      view.setUint8(i, this.readUInt8());
-    }
     this.align();
 
     return buffer;

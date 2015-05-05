@@ -4,7 +4,7 @@ export let types = {
   integer: {
     tag: "i",
     size: () => 4,
-    validate: value => (value|0) === value,
+    validate: util.isInteger,
     write(writer, value) {
       writer.writeInt32(value);
     },
@@ -13,7 +13,7 @@ export let types = {
   float: {
     tag: "f",
     size: () => 4,
-    validate: value => value === value && typeof value === "number",
+    validate: util.isFloat,
     write(writer, value) {
       writer.writeFloat32(value);
     },
@@ -22,7 +22,7 @@ export let types = {
   string: {
     tag: "s",
     size: value => util.size4(value.length + 1),
-    validate: value => typeof value === "string",
+    validate: util.isString,
     write(writer, value) {
       writer.writeString(value);
     },
@@ -30,8 +30,8 @@ export let types = {
   },
   blob: {
     tag: "b",
-    size: value => 4 + util.size4(value.length || value.byteLength),
-    validate: value => (value instanceof ArrayBuffer) || (value instanceof global.Buffer),
+    size: value => 4 + util.size4(value.byteLength || value.length),
+    validate: util.isBlob,
     write(writer, value) {
       writer.writeBlob(value);
     },
@@ -40,7 +40,7 @@ export let types = {
   timetag: {
     tag: "t",
     size: () => 8,
-    validate: value => typeof value === "number" && isFinite(+value) && Math.floor(value) === value,
+    validate: util.isTimetag,
     write(writer, value) {
       writer.writeInt64(value);
     },
@@ -49,7 +49,7 @@ export let types = {
   double: {
     tag: "d",
     size: () => 8,
-    validate: value => value === value && typeof value === "number",
+    validate: util.isDouble,
     write(writer, value) {
       writer.writeFloat64(value);
     },

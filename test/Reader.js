@@ -10,6 +10,18 @@ describe("Reader", function() {
     });
   });
 
+  describe("#read", function() {
+    it("(length: number): Buffer|ArrayBuffer", function() {
+      let reader = new Reader(new Buffer([
+        0x00, 0x00, 0x03, 0xe8,
+        0xff, 0xff, 0xff, 0xff,
+      ]));
+
+      assert.deepEqual(reader.read(5), new Buffer([ 0x00, 0x00, 0x03, 0xe8, 0xff ]));
+      assert.deepEqual(reader.read(3), new Buffer([ 0xff, 0xff, 0xff ]));
+    });
+  });
+
   describe("#readUInt8", function() {
     it("(): number", function() {
       let reader = new Reader(new Buffer([
