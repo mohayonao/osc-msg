@@ -3,10 +3,12 @@ import * as Tag from "./Tag";
 import { Buffer2 } from "dataview2";
 import Reader from "./Reader";
 import Writer from "./Writer";
+import OSCElement from "./OSCElement";
 
-export default class Message {
+export default class OSCMessage extends OSCElement {
   constructor(address = "", args = []) {
-    this._ = {};
+    super();
+
     this._.types = ",";
     this._.args = [];
     this._.size = 0;
@@ -18,28 +20,29 @@ export default class Message {
   static fromObject(obj) {
     if (typeof obj === "string") {
       obj = { address: obj };
+    } else if (obj == null || typeof obj !== "object") {
+      obj = {};
     }
-    return new Message(obj.address, obj.args);
+    return new OSCMessage(obj.address, obj.args);
   }
 
   static fromBuffer(buffer) {
-    let reader = new Reader(buffer);
-    let address = reader.readString();
-
-    if (!reader.hasNext()) {
-      return new Message(address);
+    if (!util.isBlob(buffer)) {
+      return new OSCMessage();
     }
 
+    let reader = new Reader(buffer);
+    let address = reader.readString();
     let tags = reader.readString();
 
     if (tags[0] !== ",") {
-      throw new Error("An OSC Type Tag String must start with the character ','");
+      return new OSCMessage(address);
     }
 
     let args = [];
     let stack = [];
 
-    for (let i = 1; i < tags.length; i++ ) {
+    for (let i = 1; i < tags.length; i++) {
       let tag = tags[i];
       if (tag === "[") {
         stack.push(args);
@@ -54,7 +57,7 @@ export default class Message {
       } else {
         let type = Tag.tags[tag];
         if (!Tag.types.hasOwnProperty(type)) {
-          throw new Error(`Not supported argument code '${type}'`);
+          throw new Error(`Not supported tag '${tag}'`);
         }
         args.push({ type, value: Tag.types[type].read(reader) });
       }
@@ -64,7 +67,11 @@ export default class Message {
       throw new Error("Unexpected token '['");
     }
 
-    return new Message(address, args);
+    return new OSCMessage(address, args);
+  }
+
+  get oscType() {
+    return "message";
   }
 
   get address() {
@@ -142,7 +149,7 @@ export default class Message {
   }
 
   clone() {
-    return new Message(this.address, this._.args.map((obj) => {
+    return new OSCMessage(this.address, this._.args.map((obj) => {
       return { type: obj.type, value: obj.value };
     }));
   }
@@ -170,20 +177,14 @@ export default class Message {
     return {
       address: this.address,
       args: objArgs,
-      oscType: "message",
+      oscType: this.oscType,
     };
   }
 
   toBuffer() {
     let buffer = new Buffer2(this.size);
-    let writer = new Writer(buffer);
 
-    writer.writeString(this.address);
-    writer.writeString(this.types);
-
-    this._.args.forEach((arg) => {
-      Tag.types[arg.type].write(writer, arg.value);
-    });
+    this._writeTo(new Writer(buffer));
 
     return buffer;
   }
@@ -203,4 +204,15 @@ export default class Message {
     }
     return { type: "null", value: null };
   }
+
+  _writeTo(writer) {
+    writer.writeString(this.address);
+    writer.writeString(this.types);
+
+    this._.args.forEach((arg) => {
+      Tag.types[arg.type].write(writer, arg.value);
+    });
+  }
 }
+
+OSCElement.OSCMessage = OSCMessage;

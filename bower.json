@@ -1,0 +1,27 @@
+{
+  "name": "osc-msg",
+  "description": "Isomorphic Open Sound Control Utilities",
+  "version": "0.0.2",
+  "authors": [
+    "Nao Yonamine <mohayonao@gmail.com>"
+  ],
+  "homepage": "https://github.com/mohayonao/osc-msg",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src",
+    "test",
+    "coverage",
+    "package.json"
+  ],
+  "keywords": [
+    "osc"
+  ],
+  "license": "MIT",
+  "main": "build/osc-msg.js",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/mohayonao/osc-msg.git"
+  }
+}
