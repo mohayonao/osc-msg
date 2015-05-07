@@ -4,22 +4,22 @@ const TWO_TO_THE_32 = Math.pow(2, 32);
 
 export default class Writer {
   constructor(buffer) {
-    this.data = new DataView2(buffer);
+    this.view = new DataView2(buffer);
     this.index = 0;
   }
 
   writeUInt8(value) {
-    this.data.setUint8(this.index, value);
+    this.view.setUint8(this.index, value);
     this.index += 1;
   }
 
   writeInt32(value) {
-    this.data.setInt32(this.index, value);
+    this.view.setInt32(this.index, value);
     this.index += 4;
   }
 
   writeUInt32(value) {
-    this.data.setUint32(this.index, value);
+    this.view.setUint32(this.index, value);
     this.index += 4;
   }
 
@@ -27,18 +27,18 @@ export default class Writer {
     let hi = (value / TWO_TO_THE_32) >>> 0;
     let lo = value >>> 0;
 
-    this.data.setUint32(this.index + 0, hi);
-    this.data.setUint32(this.index + 4, lo);
+    this.view.setUint32(this.index + 0, hi);
+    this.view.setUint32(this.index + 4, lo);
     this.index += 8;
   }
 
   writeFloat32(value) {
-    this.data.setFloat32(this.index, value);
+    this.view.setFloat32(this.index, value);
     this.index += 4;
   }
 
   writeFloat64(value) {
-    this.data.setFloat64(this.index, value);
+    this.view.setFloat64(this.index, value);
     this.index += 8;
   }
 
@@ -65,12 +65,12 @@ export default class Writer {
   }
 
   hasNext() {
-    return this.index < this.data.byteLength;
+    return this.index < this.view.byteLength;
   }
 
   align() {
     while (this.index % 4 !== 0) {
-      this.data.setUint8(this.index, 0);
+      this.view.setUint8(this.index, 0);
       this.index += 1;
     }
   }

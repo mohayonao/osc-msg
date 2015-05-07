@@ -1,7 +1,7 @@
 {
   "name": "osc-msg",
   "description": "Isomorphic Open Sound Control Utilities",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "author": "Nao Yonamine <mohayonao@gmail.com>",
   "bugs": {
     "url": "https://github.com/mohayonao/osc-msg/issues"
