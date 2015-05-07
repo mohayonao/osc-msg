@@ -4,7 +4,7 @@ const TWO_TO_THE_32 = Math.pow(2, 32);
 
 export default class Reader {
   constructor(buffer) {
-    this.data = new DataView2(buffer);
+    this.view = new DataView2(buffer);
     this.index = 0;
   }
 
@@ -21,17 +21,17 @@ export default class Reader {
 
   readUInt8() {
     this.index += 1;
-    return this.data.getUint8(this.index - 1);
+    return this.view.getUint8(this.index - 1);
   }
 
   readInt32() {
     this.index += 4;
-    return this.data.getInt32(this.index - 4);
+    return this.view.getInt32(this.index - 4);
   }
 
   readUInt32() {
     this.index += 4;
-    return this.data.getUint32(this.index - 4);
+    return this.view.getUint32(this.index - 4);
   }
 
   readInt64() {
@@ -42,12 +42,12 @@ export default class Reader {
 
   readFloat32() {
     this.index += 4;
-    return this.data.getFloat32(this.index - 4);
+    return this.view.getFloat32(this.index - 4);
   }
 
   readFloat64() {
     this.index += 8;
-    return this.data.getFloat64(this.index - 8);
+    return this.view.getFloat64(this.index - 8);
   }
 
   readString() {
@@ -72,11 +72,11 @@ export default class Reader {
   }
 
   hasNext() {
-    return this.index < this.data.byteLength;
+    return this.index < this.view.byteLength;
   }
 
   align() {
-    while (this.hasNext() && this.index % 4 !== 0 && this.data.getUint8(this.index) === 0x00) {
+    while (this.hasNext() && this.index % 4 !== 0 && this.view.getUint8(this.index) === 0x00) {
       this.index += 1;
     }
   }
