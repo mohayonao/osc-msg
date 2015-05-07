@@ -10,17 +10,17 @@
     "dataview2": "^0.1.0"
   },
   "devDependencies": {
-    "babel": "^5.2.6",
-    "babel-eslint": "^3.0.1",
+    "babel": "^5.2.16",
+    "babel-eslint": "^3.1.0",
     "babelify": "^6.0.2",
-    "browserify": "^10.0.0",
+    "browserify": "^10.1.1",
     "eslint": "^0.20.0",
     "espower-babel": "^2.1.1",
     "isparta": "^3.0.3",
     "mocha": "^2.2.4",
     "osc-min": "^0.2.0",
     "power-assert": "^0.11.0",
-    "uglify-js": "^2.4.20"
+    "uglify-js": "^2.4.21"
   },
   "files": [
     "package.json",
