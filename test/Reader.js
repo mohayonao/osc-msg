@@ -36,7 +36,8 @@ describe("Reader", function() {
       assert(reader.readUInt8() === 0xff);
       assert(reader.readUInt8() === 0xff);
       assert(reader.readUInt8() === 0xff);
-      assert(reader.readUInt8() === 0xff);
+      assert(reader.readUInt8() === 0xff); // EOD
+      assert(reader.readUInt8() === 0x00);
     });
   });
 
@@ -48,7 +49,8 @@ describe("Reader", function() {
       ]));
 
       assert(reader.readInt32() === 1000);
-      assert(reader.readInt32() ===   -1);
+      assert(reader.readInt32() ===   -1); // EOD
+      assert(reader.readInt32() ===    0);
     });
   });
 
@@ -60,7 +62,8 @@ describe("Reader", function() {
       ]));
 
       assert(reader.readUInt32() === 1000);
-      assert(reader.readUInt32() === 4294967295);
+      assert(reader.readUInt32() === 4294967295); // EOD
+      assert(reader.readUInt32() === 0);
     });
   });
 
@@ -71,7 +74,8 @@ describe("Reader", function() {
         0xff, 0xff, 0xff, 0xff,
       ]));
 
-      assert(reader.readInt64() === 4299262263295);
+      assert(reader.readInt64() === 4299262263295); // EOD
+      assert(reader.readInt64() === 0);
     });
   });
 
@@ -83,7 +87,8 @@ describe("Reader", function() {
       ]));
 
       assert(reader.readFloat32() === 1.2339999675750732);
-      assert(reader.readFloat32() === 5.6779999732971190);
+      assert(reader.readFloat32() === 5.6779999732971190); // EOD
+      assert(reader.readFloat32() === 0);
     });
   });
 
@@ -97,7 +102,8 @@ describe("Reader", function() {
       ]));
 
       assert(reader.readFloat64() === 1.2345678);
-      assert(reader.readFloat64() === 9.0123456);
+      assert(reader.readFloat64() === 9.0123456); // EOD
+      assert(reader.readFloat64() === 0);
     });
   });
 
@@ -111,7 +117,8 @@ describe("Reader", function() {
       ]));
 
       assert(reader.readString() === "/foo");
-      assert(reader.readString() === ",iisff");
+      assert(reader.readString() === ",iisff"); // EOD
+      assert(reader.readString() === "");
     });
   });
 
@@ -123,10 +130,28 @@ describe("Reader", function() {
         0x05, 0x06, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x04, // size = 4
         0x07, 0x08, 0x09, 0x00, // Buffer([ 0x07, 0x08, 0x09, 0x00 ])
+        0x00, 0x00, 0x00, 0x08, // size = 8
+        0x0a,                   // Buffer([ 0x0a, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ])
       ]));
 
       assert.deepEqual(reader.readBlob(), new Buffer([ 0x01, 0x02, 0x03, 0x04, 0x05, 0x06 ]));
       assert.deepEqual(reader.readBlob(), new Buffer([ 0x07, 0x08, 0x09, 0x00 ]));
+      assert.deepEqual(reader.readBlob(), new Buffer([ 0x0a, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ])); // EOD
+      assert.deepEqual(reader.readBlob(), new Buffer(0));
+    });
+  });
+
+  describe("#hasError", function() {
+    it("(): boolean", function() {
+      let reader = new Reader(new Buffer(4));
+
+      assert(reader.hasError() === false);
+
+      reader.readUInt32();
+      assert(reader.hasError() === false);
+
+      reader.readUInt32();
+      assert(reader.hasError() === true);
     });
   });
 
