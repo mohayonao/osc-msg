@@ -4,10 +4,11 @@
 [![Bower](http://img.shields.io/bower/v/osc-msg.svg?style=flat-square)](http://bower.io/search/?q=osc-msg)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](http://mohayonao.mit-license.org/)
 
-> Isomorphic Open Sound Control Utilities
+> Isomorphic JavaScript library for message of Open Sound Control
 
 ## Features
 - Works in both Node.js / io.js and browsers
+- Durable for broken messages
 
 ## Installation
 
