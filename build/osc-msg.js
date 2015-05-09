@@ -288,27 +288,27 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { "default": obj }; };
+
+var _interopRequireWildcard = function (obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } };
+
+var _toConsumableArray = function (arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { desc = parent = getter = undefined; _again = false; var object = _x3,
     property = _x4,
     receiver = _x5; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } }
+var _import = require("./util");
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+var util = _interopRequireWildcard(_import);
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
-
-var _util = require("./util");
-
-var util = _interopRequireWildcard(_util);
-
-var _dataview2 = require("dataview2");
+var _Buffer2 = require("dataview2");
 
 var _Reader = require("./Reader");
 
@@ -333,6 +333,7 @@ var OSCBundle = (function (_OSCElement) {
 
     this._.timetag = 0;
     this._.elements = [];
+    this._.hasError = false;
 
     this.timetag = timetag;
     this.add.apply(this, _toConsumableArray(elements));
@@ -409,17 +410,23 @@ var OSCBundle = (function (_OSCElement) {
   }, {
     key: "toObject",
     value: function toObject() {
-      return {
+      var obj = {
         timetag: this.timetag,
         elements: this._.elements.map(function (element) {
           return element.toObject();
         }),
         oscType: this.oscType };
+
+      if (this._.hasError) {
+        obj.error = true;
+      }
+
+      return obj;
     }
   }, {
     key: "toBuffer",
     value: function toBuffer() {
-      var buffer = new _dataview2.Buffer2(this.size);
+      var buffer = new _Buffer2.Buffer2(this.size);
 
       this._writeTo(new _Writer2["default"](buffer));
 
@@ -469,7 +476,11 @@ var OSCBundle = (function (_OSCElement) {
         elements.push(_OSCElement3["default"].fromBuffer(_buffer));
       }
 
-      return new OSCBundle(timetag, elements);
+      var bundle = new OSCBundle(timetag, elements);
+
+      bundle._.hasError = reader.hasError();
+
+      return bundle;
     }
   }]);
 
@@ -488,17 +499,17 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { "default": obj }; };
+
+var _interopRequireWildcard = function (obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+var _import = require("./util");
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var _util = require("./util");
-
-var util = _interopRequireWildcard(_util);
+var util = _interopRequireWildcard(_import);
 
 var _Reader = require("./Reader");
 
@@ -561,31 +572,31 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { "default": obj }; };
+
+var _interopRequireWildcard = function (obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } };
+
+var _toConsumableArray = function (arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { desc = parent = getter = undefined; _again = false; var object = _x3,
     property = _x4,
     receiver = _x5; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } }
+var _import = require("./util");
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+var util = _interopRequireWildcard(_import);
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _import2 = require("./Tag");
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+var Tag = _interopRequireWildcard(_import2);
 
-var _util = require("./util");
-
-var util = _interopRequireWildcard(_util);
-
-var _Tag = require("./Tag");
-
-var Tag = _interopRequireWildcard(_Tag);
-
-var _dataview2 = require("dataview2");
+var _Buffer2 = require("dataview2");
 
 var _Reader = require("./Reader");
 
@@ -611,6 +622,7 @@ var OSCMessage = (function (_OSCElement) {
     this._.types = ",";
     this._.args = [];
     this._.size = 0;
+    this._.hasError = false;
 
     this.address = address;
     this.add.apply(this, _toConsumableArray(args));
@@ -737,15 +749,21 @@ var OSCMessage = (function (_OSCElement) {
         }
       }
 
-      return {
+      var obj = {
         address: this.address,
         args: objArgs,
         oscType: this.oscType };
+
+      if (this._.hasError) {
+        obj.error = true;
+      }
+
+      return obj;
     }
   }, {
     key: "toBuffer",
     value: function toBuffer() {
-      var buffer = new _dataview2.Buffer2(this.size);
+      var buffer = new _Buffer2.Buffer2(this.size);
 
       this._writeTo(new _Writer2["default"](buffer));
 
@@ -832,7 +850,11 @@ var OSCMessage = (function (_OSCElement) {
         throw new Error("Unexpected token '['");
       }
 
-      return new OSCMessage(address, args);
+      var msg = new OSCMessage(address, args);
+
+      msg._.hasError = reader.hasError();
+
+      return msg;
     }
   }]);
 
@@ -851,11 +873,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var _dataview2 = require("dataview2");
+var _DataView2$Buffer2 = require("dataview2");
 
 var TWO_TO_THE_32 = Math.pow(2, 32);
 
@@ -863,15 +885,16 @@ var Reader = (function () {
   function Reader(buffer) {
     _classCallCheck(this, Reader);
 
-    this.view = new _dataview2.DataView2(buffer);
+    this.view = new _DataView2$Buffer2.DataView2(buffer);
     this.index = 0;
+    this.error = false;
   }
 
   _createClass(Reader, [{
     key: "read",
     value: function read(length) {
-      var buffer = new _dataview2.Buffer2(length);
-      var view = new _dataview2.DataView2(buffer);
+      var buffer = new _DataView2$Buffer2.Buffer2(length);
+      var view = new _DataView2$Buffer2.DataView2(buffer);
 
       for (var i = 0; i < length; i++) {
         view.setUint8(i, this.readUInt8());
@@ -883,18 +906,30 @@ var Reader = (function () {
     key: "readUInt8",
     value: function readUInt8() {
       this.index += 1;
+      if (this.view.byteLength < this.index) {
+        this.error = true;
+        return 0;
+      }
       return this.view.getUint8(this.index - 1);
     }
   }, {
     key: "readInt32",
     value: function readInt32() {
       this.index += 4;
+      if (this.view.byteLength < this.index) {
+        this.error = true;
+        return 0;
+      }
       return this.view.getInt32(this.index - 4);
     }
   }, {
     key: "readUInt32",
     value: function readUInt32() {
       this.index += 4;
+      if (this.view.byteLength < this.index) {
+        this.error = true;
+        return 0;
+      }
       return this.view.getUint32(this.index - 4);
     }
   }, {
@@ -908,12 +943,19 @@ var Reader = (function () {
     key: "readFloat32",
     value: function readFloat32() {
       this.index += 4;
+      if (this.view.byteLength < this.index) {
+        return 0;
+      }
       return this.view.getFloat32(this.index - 4);
     }
   }, {
     key: "readFloat64",
     value: function readFloat64() {
       this.index += 8;
+      if (this.view.byteLength < this.index) {
+        this.error = true;
+        return 0;
+      }
       return this.view.getFloat64(this.index - 8);
     }
   }, {
@@ -938,6 +980,11 @@ var Reader = (function () {
       this.align();
 
       return buffer;
+    }
+  }, {
+    key: "hasError",
+    value: function hasError() {
+      return this.error;
     }
   }, {
     key: "hasNext",
@@ -966,11 +1013,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } }
+var _interopRequireWildcard = function (obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } };
 
-var _util = require("./util");
+var _import = require("./util");
 
-var util = _interopRequireWildcard(_util);
+var util = _interopRequireWildcard(_import);
 
 var types = {
   integer: {
@@ -1109,11 +1156,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var _dataview2 = require("dataview2");
+var _DataView2 = require("dataview2");
 
 var TWO_TO_THE_32 = Math.pow(2, 32);
 
@@ -1121,27 +1168,40 @@ var Writer = (function () {
   function Writer(buffer) {
     _classCallCheck(this, Writer);
 
-    this.view = new _dataview2.DataView2(buffer);
+    this.view = new _DataView2.DataView2(buffer);
     this.index = 0;
+    this.error = false;
   }
 
   _createClass(Writer, [{
     key: "writeUInt8",
     value: function writeUInt8(value) {
-      this.view.setUint8(this.index, value);
       this.index += 1;
+      if (this.view.byteLength < this.index) {
+        this.error = true;
+        return;
+      }
+      this.view.setUint8(this.index - 1, value);
     }
   }, {
     key: "writeInt32",
     value: function writeInt32(value) {
-      this.view.setInt32(this.index, value);
       this.index += 4;
+      if (this.view.byteLength < this.index) {
+        this.error = true;
+        return;
+      }
+      this.view.setInt32(this.index - 4, value);
     }
   }, {
     key: "writeUInt32",
     value: function writeUInt32(value) {
-      this.view.setUint32(this.index, value);
       this.index += 4;
+      if (this.view.byteLength < this.index) {
+        this.error = true;
+        return;
+      }
+      this.view.setUint32(this.index - 4, value);
     }
   }, {
     key: "writeInt64",
@@ -1149,21 +1209,28 @@ var Writer = (function () {
       var hi = value / TWO_TO_THE_32 >>> 0;
       var lo = value >>> 0;
 
-      this.view.setUint32(this.index + 0, hi);
-      this.view.setUint32(this.index + 4, lo);
-      this.index += 8;
+      this.writeUInt32(hi);
+      this.writeUInt32(lo);
     }
   }, {
     key: "writeFloat32",
     value: function writeFloat32(value) {
-      this.view.setFloat32(this.index, value);
       this.index += 4;
+      if (this.view.byteLength < this.index) {
+        this.error = true;
+        return;
+      }
+      this.view.setFloat32(this.index - 4, value);
     }
   }, {
     key: "writeFloat64",
     value: function writeFloat64(value) {
-      this.view.setFloat64(this.index, value);
       this.index += 8;
+      if (this.view.byteLength < this.index) {
+        this.error = true;
+        return;
+      }
+      this.view.setFloat64(this.index - 8, value);
     }
   }, {
     key: "writeString",
@@ -1178,7 +1245,7 @@ var Writer = (function () {
   }, {
     key: "writeBlob",
     value: function writeBlob(value) {
-      var view = new _dataview2.DataView2(value);
+      var view = new _DataView2.DataView2(value);
       var length = view.byteLength;
 
       this.writeUInt32(length);
@@ -1190,6 +1257,11 @@ var Writer = (function () {
       this.align();
     }
   }, {
+    key: "hasError",
+    value: function hasError() {
+      return this.error;
+    }
+  }, {
     key: "hasNext",
     value: function hasNext() {
       return this.index < this.view.byteLength;
@@ -1198,8 +1270,7 @@ var Writer = (function () {
     key: "align",
     value: function align() {
       while (this.index % 4 !== 0) {
-        this.view.setUint8(this.index, 0);
-        this.index += 1;
+        this.writeUInt8(0);
       }
     }
   }]);
@@ -1261,7 +1332,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { "default": obj }; };
 
 var _OSCElement = require("./OSCElement");
 

@@ -6,6 +6,7 @@ export default class Reader {
   constructor(buffer) {
     this.view = new DataView2(buffer);
     this.index = 0;
+    this.error = false;
   }
 
   read(length) {
@@ -21,16 +22,28 @@ export default class Reader {
 
   readUInt8() {
     this.index += 1;
+    if (this.view.byteLength < this.index) {
+      this.error = true;
+      return 0;
+    }
     return this.view.getUint8(this.index - 1);
   }
 
   readInt32() {
     this.index += 4;
+    if (this.view.byteLength < this.index) {
+      this.error = true;
+      return 0;
+    }
     return this.view.getInt32(this.index - 4);
   }
 
   readUInt32() {
     this.index += 4;
+    if (this.view.byteLength < this.index) {
+      this.error = true;
+      return 0;
+    }
     return this.view.getUint32(this.index - 4);
   }
 
@@ -42,11 +55,18 @@ export default class Reader {
 
   readFloat32() {
     this.index += 4;
+    if (this.view.byteLength < this.index) {
+      return 0;
+    }
     return this.view.getFloat32(this.index - 4);
   }
 
   readFloat64() {
     this.index += 8;
+    if (this.view.byteLength < this.index) {
+      this.error = true;
+      return 0;
+    }
     return this.view.getFloat64(this.index - 8);
   }
 
@@ -69,6 +89,10 @@ export default class Reader {
     this.align();
 
     return buffer;
+  }
+
+  hasError() {
+    return this.error;
   }
 
   hasNext() {

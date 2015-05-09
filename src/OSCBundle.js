@@ -10,6 +10,7 @@ export default class OSCBundle extends OSCElement {
 
     this._.timetag = 0;
     this._.elements = [];
+    this._.hasError = false;
 
     this.timetag = timetag;
     this.add(...elements);
@@ -44,7 +45,11 @@ export default class OSCBundle extends OSCElement {
       elements.push(OSCElement.fromBuffer(buffer));
     }
 
-    return new OSCBundle(timetag, elements);
+    let bundle = new OSCBundle(timetag, elements);
+
+    bundle._.hasError = reader.hasError();
+
+    return bundle;
   }
 
   get oscType() {
@@ -99,11 +104,17 @@ export default class OSCBundle extends OSCElement {
   }
 
   toObject() {
-    return {
+    let obj = {
       timetag: this.timetag,
       elements: this._.elements.map(element => element.toObject()),
       oscType: this.oscType,
     };
+
+    if (this._.hasError) {
+      obj.error = true;
+    }
+
+    return obj;
   }
 
   toBuffer() {
