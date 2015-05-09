@@ -253,8 +253,23 @@ describe("OSCMessage", function() {
   describe("#toObject", function() {
     it("(): object <OSCMessage>", function() {
       let msg = new OSCMessage("/foo", [ 1 ]);
+      let obj = msg.toObject();
 
-      assert(msg.toObject() instanceof Object);
+      assert(obj instanceof Object);
+      assert(typeof obj.address === "string");
+      assert(Array.isArray(obj.args));
+      assert(obj.oscType === "message");
+      assert(!obj.hasOwnProperty("error"));
+    });
+    it("(): object <OSCMessage:error>", function() {
+      let msg = OSCMessage.fromBuffer(new Buffer("/foo\0\0\0\0,i"));
+      let obj = msg.toObject();
+
+      assert(obj instanceof Object);
+      assert(typeof obj.address === "string");
+      assert(Array.isArray(obj.args));
+      assert(obj.oscType === "message");
+      assert(obj.error === true);
     });
   });
 

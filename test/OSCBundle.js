@@ -310,8 +310,23 @@ describe("OSCBundle", function() {
   describe("#toObject", function() {
     it("(): object <OSCBundle>", function() {
       let bundle = new OSCBundle(timetag, [ "/foo" ]);
+      let obj = bundle.toObject();
 
-      assert(bundle.toObject() instanceof Object);
+      assert(obj instanceof Object);
+      assert(typeof obj.timetag === "number");
+      assert(Array.isArray(obj.elements));
+      assert(obj.oscType === "bundle");
+      assert(!obj.hasOwnProperty("error"));
+    });
+    it("(): object <OSCBundle:error>", function() {
+      let bundle = OSCBundle.fromBuffer(new Buffer("#bundle\0"));
+      let obj = bundle.toObject();
+
+      assert(obj instanceof Object);
+      assert(typeof obj.timetag === "number");
+      assert(Array.isArray(obj.elements));
+      assert(obj.oscType === "bundle");
+      assert(obj.error === true);
     });
   });
 

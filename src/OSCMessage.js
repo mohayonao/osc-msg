@@ -12,6 +12,7 @@ export default class OSCMessage extends OSCElement {
     this._.types = ",";
     this._.args = [];
     this._.size = 0;
+    this._.hasError = false;
 
     this.address = address;
     this.add(...args);
@@ -67,7 +68,11 @@ export default class OSCMessage extends OSCElement {
       throw new Error("Unexpected token '['");
     }
 
-    return new OSCMessage(address, args);
+    let msg = new OSCMessage(address, args);
+
+    msg._.hasError = reader.hasError();
+
+    return msg;
   }
 
   get oscType() {
@@ -174,11 +179,17 @@ export default class OSCMessage extends OSCElement {
       }
     }
 
-    return {
+    let obj = {
       address: this.address,
       args: objArgs,
       oscType: this.oscType,
     };
+
+    if (this._.hasError) {
+      obj.error = true;
+    }
+
+    return obj;
   }
 
   toBuffer() {
