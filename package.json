@@ -1,7 +1,7 @@
 {
   "name": "osc-msg",
   "description": "Isomorphic JavaScript library for message of Open Sound Control",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "Nao Yonamine <mohayonao@gmail.com>",
   "bugs": {
     "url": "https://github.com/mohayonao/osc-msg/issues"
@@ -50,7 +50,7 @@
     "lint": "eslint src test",
     "mocha": "mocha",
     "prepublish": "npm run lint && npm run mocha && npm run build-to5",
-    "test": "mocha --require espower-babel/guess",
+    "test": "mocha",
     "travis": "npm run lint && npm run cover"
   }
 }

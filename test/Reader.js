@@ -19,6 +19,7 @@ describe("Reader", function() {
 
       assert.deepEqual(reader.read(5), new Buffer([ 0x00, 0x00, 0x03, 0xe8, 0xff ]));
       assert.deepEqual(reader.read(3), new Buffer([ 0xff, 0xff, 0xff ]));
+      assert.deepEqual(reader.read(1 << 31), new Buffer(0));
     });
   });
 
@@ -136,7 +137,7 @@ describe("Reader", function() {
 
       assert.deepEqual(reader.readBlob(), new Buffer([ 0x01, 0x02, 0x03, 0x04, 0x05, 0x06 ]));
       assert.deepEqual(reader.readBlob(), new Buffer([ 0x07, 0x08, 0x09, 0x00 ]));
-      assert.deepEqual(reader.readBlob(), new Buffer([ 0x0a, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ])); // EOD
+      assert.deepEqual(reader.readBlob(), new Buffer(0)); // EOD
       assert.deepEqual(reader.readBlob(), new Buffer(0));
     });
   });
