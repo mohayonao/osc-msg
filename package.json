@@ -50,7 +50,7 @@
     "lint": "eslint src test",
     "mocha": "mocha",
     "prepublish": "npm run lint && npm run mocha && npm run build-to5",
-    "test": "mocha --require espower-babel/guess",
+    "test": "mocha",
     "travis": "npm run lint && npm run cover"
   }
 }
