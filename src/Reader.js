@@ -10,6 +10,12 @@ export default class Reader {
   }
 
   read(length) {
+    if (this.view.byteLength < this.index + length) {
+      this.index += length;
+      this.error = true;
+      return new Buffer2(0);
+    }
+
     let buffer = new Buffer2(length);
     let view = new DataView2(buffer);
 
