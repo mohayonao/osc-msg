@@ -1,7 +1,7 @@
 {
   "name": "osc-msg",
   "description": "Isomorphic JavaScript library for message of Open Sound Control",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "Nao Yonamine <mohayonao@gmail.com>",
   "bugs": {
     "url": "https://github.com/mohayonao/osc-msg/issues"
