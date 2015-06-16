@@ -340,36 +340,6 @@ var OSCBundle = (function (_OSCElement) {
   _inherits(OSCBundle, _OSCElement);
 
   _createClass(OSCBundle, [{
-    key: "oscType",
-    get: function () {
-      return "bundle";
-    }
-  }, {
-    key: "timetag",
-    get: function () {
-      return this._.timetag;
-    },
-    set: function (value) {
-      if (!util.isTimetag(value)) {
-        throw new Error("timetag must be an integer");
-      }
-      this._.timetag = value;
-    }
-  }, {
-    key: "size",
-    get: function () {
-      var result = 0;
-
-      result += 8; // "#bundle_"
-      result += 8; // timetag
-      result += this._.elements.length * 4;
-      result += this._.elements.reduce(function (a, b) {
-        return a + b.size;
-      }, 0);
-
-      return result;
-    }
-  }, {
     key: "add",
     value: function add() {
       var _this = this;
@@ -413,7 +383,8 @@ var OSCBundle = (function (_OSCElement) {
         elements: this._.elements.map(function (element) {
           return element.toObject();
         }),
-        oscType: this.oscType };
+        oscType: this.oscType
+      };
 
       if (this._.hasError) {
         obj.error = true;
@@ -441,6 +412,36 @@ var OSCBundle = (function (_OSCElement) {
         writer.writeUInt32(element.size);
         element._writeTo(writer);
       });
+    }
+  }, {
+    key: "oscType",
+    get: function () {
+      return "bundle";
+    }
+  }, {
+    key: "timetag",
+    get: function () {
+      return this._.timetag;
+    },
+    set: function (value) {
+      if (!util.isTimetag(value)) {
+        throw new Error("timetag must be an integer");
+      }
+      this._.timetag = value;
+    }
+  }, {
+    key: "size",
+    get: function () {
+      var result = 0;
+
+      result += 8; // "#bundle_"
+      result += 8; // timetag
+      result += this._.elements.length * 4;
+      result += this._.elements.reduce(function (a, b) {
+        return a + b.size;
+      }, 0);
+
+      return result;
     }
   }], [{
     key: "fromObject",
@@ -518,7 +519,8 @@ var OSCElement = (function () {
     _classCallCheck(this, OSCElement);
 
     Object.defineProperty(this, "_", {
-      value: {} });
+      value: {}
+    });
   }
 
   _createClass(OSCElement, null, [{
@@ -627,38 +629,6 @@ var OSCMessage = (function (_OSCElement) {
   _inherits(OSCMessage, _OSCElement);
 
   _createClass(OSCMessage, [{
-    key: "oscType",
-    get: function () {
-      return "message";
-    }
-  }, {
-    key: "address",
-    get: function () {
-      return this._.address;
-    },
-    set: function (value) {
-      if (typeof value !== "string") {
-        throw new Error("address must be string");
-      }
-      this._.address = value;
-    }
-  }, {
-    key: "types",
-    get: function () {
-      return this._.types;
-    }
-  }, {
-    key: "size",
-    get: function () {
-      var result = 0;
-
-      result += util.size4(this._.address.length + 1);
-      result += util.size4(this._.types.length + 1);
-      result += this._.size;
-
-      return result;
-    }
-  }, {
     key: "add",
     value: function add() {
       var _this = this;
@@ -748,7 +718,8 @@ var OSCMessage = (function (_OSCElement) {
       var obj = {
         address: this.address,
         args: objArgs,
-        oscType: this.oscType };
+        oscType: this.oscType
+      };
 
       if (this._.hasError) {
         obj.error = true;
@@ -792,6 +763,38 @@ var OSCMessage = (function (_OSCElement) {
       this._.args.forEach(function (arg) {
         Tag.types[arg.type].write(writer, arg.value);
       });
+    }
+  }, {
+    key: "oscType",
+    get: function () {
+      return "message";
+    }
+  }, {
+    key: "address",
+    get: function () {
+      return this._.address;
+    },
+    set: function (value) {
+      if (typeof value !== "string") {
+        throw new Error("address must be string");
+      }
+      this._.address = value;
+    }
+  }, {
+    key: "types",
+    get: function () {
+      return this._.types;
+    }
+  }, {
+    key: "size",
+    get: function () {
+      var result = 0;
+
+      result += util.size4(this._.address.length + 1);
+      result += util.size4(this._.types.length + 1);
+      result += this._.size;
+
+      return result;
     }
   }], [{
     key: "fromObject",
@@ -1033,7 +1036,8 @@ var types = {
     },
     read: function read(reader) {
       return reader.readInt32();
-    } },
+    }
+  },
   float: {
     tag: "f",
     size: function size() {
@@ -1045,7 +1049,8 @@ var types = {
     },
     read: function read(reader) {
       return reader.readFloat32();
-    } },
+    }
+  },
   string: {
     tag: "s",
     size: function size(value) {
@@ -1057,7 +1062,8 @@ var types = {
     },
     read: function read(reader) {
       return reader.readString();
-    } },
+    }
+  },
   blob: {
     tag: "b",
     size: function size(value) {
@@ -1069,7 +1075,8 @@ var types = {
     },
     read: function read(reader) {
       return reader.readBlob();
-    } },
+    }
+  },
   timetag: {
     tag: "t",
     size: function size() {
@@ -1081,7 +1088,8 @@ var types = {
     },
     read: function read(reader) {
       return reader.readInt64();
-    } },
+    }
+  },
   double: {
     tag: "d",
     size: function size() {
@@ -1093,7 +1101,8 @@ var types = {
     },
     read: function read(reader) {
       return reader.readFloat64();
-    } },
+    }
+  },
   "true": {
     tag: "T",
     size: function size() {
@@ -1105,7 +1114,8 @@ var types = {
     write: function write() {},
     read: function read() {
       return true;
-    } },
+    }
+  },
   "false": {
     tag: "F",
     size: function size() {
@@ -1117,7 +1127,8 @@ var types = {
     write: function write() {},
     read: function read() {
       return false;
-    } },
+    }
+  },
   "null": {
     tag: "N",
     size: function size() {
@@ -1129,7 +1140,8 @@ var types = {
     write: function write() {},
     read: function read() {
       return null;
-    } },
+    }
+  },
   bang: {
     tag: "I",
     size: function size() {
@@ -1141,7 +1153,9 @@ var types = {
     write: function write() {},
     read: function read() {
       return "bang";
-    } } };
+    }
+  }
+};
 
 exports.types = types;
 var tags = {};
@@ -1303,7 +1317,7 @@ function size4(num) {
 }
 
 function isInteger(value) {
-  return (value | 0) === value;
+  return Math.floor(value) === value && value % 1 === 0;
 }
 
 function isFloat(value) {
@@ -1319,7 +1333,7 @@ function isBlob(value) {
 }
 
 function isTimetag(value) {
-  return typeof value === "number" && isFinite(+value) && value >= 0 && Math.floor(value) === value;
+  return typeof value === "number" && value >= 0 && value % 1 === 0;
 }
 
 function isDouble(value) {
@@ -1356,7 +1370,8 @@ exports["default"] = {
   },
   toBuffer: function toBuffer(obj) {
     return _OSCElement2["default"].fromObject(obj).toBuffer();
-  } };
+  }
+};
 module.exports = exports["default"];
 
 },{"./OSCBundle":3,"./OSCElement":4,"./OSCMessage":5}]},{},[10])(10)
