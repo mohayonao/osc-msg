@@ -3,7 +3,7 @@ export function size4(num) {
 }
 
 export function isInteger(value) {
-  return (value|0) === value;
+  return Math.floor(value) === value && value % 1 === 0;
 }
 
 export function isFloat(value) {
@@ -19,7 +19,7 @@ export function isBlob(value) {
 }
 
 export function isTimetag(value) {
-  return typeof value === "number" && isFinite(+value) && value >= 0 && Math.floor(value) === value;
+  return typeof value === "number" && value >= 0 && value % 1 === 0;
 }
 
 export function isDouble(value) {

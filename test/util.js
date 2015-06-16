@@ -20,6 +20,7 @@ describe("util", function() {
     it("(value: any): boolean", function() {
       assert(util.isInteger(-1) === true);
       assert(util.isInteger(10) === true);
+      assert(util.isInteger(4294967295) === true);
       assert(util.isInteger(1.5) === false);
       assert(util.isInteger(Infinity) === false);
       assert(util.isInteger(NaN) === false);
@@ -36,6 +37,7 @@ describe("util", function() {
     it("(value: any): boolean", function() {
       assert(util.isFloat(-1) === true);
       assert(util.isFloat(10) === true);
+      assert(util.isFloat(4294967295) === true);
       assert(util.isFloat(1.5) === true);
       assert(util.isFloat(Infinity) === true);
       assert(util.isFloat(NaN) === false);
@@ -52,6 +54,7 @@ describe("util", function() {
     it("(value: any): boolean", function() {
       assert(util.isString(-1) === false);
       assert(util.isString(10) === false);
+      assert(util.isString(4294967295) === false);
       assert(util.isString(1.5) === false);
       assert(util.isString(Infinity) === false);
       assert(util.isString(NaN) === false);
@@ -68,6 +71,7 @@ describe("util", function() {
     it("(value: any): boolean", function() {
       assert(util.isBlob(-1) === false);
       assert(util.isBlob(10) === false);
+      assert(util.isBlob(4294967295) === false);
       assert(util.isBlob(1.5) === false);
       assert(util.isBlob(Infinity) === false);
       assert(util.isBlob(NaN) === false);
@@ -84,6 +88,7 @@ describe("util", function() {
     it("(value: any): boolean", function() {
       assert(util.isTimetag(-1) === false);
       assert(util.isTimetag(10) === true);
+      assert(util.isTimetag(4294967295) === true);
       assert(util.isTimetag(1.5) === false);
       assert(util.isTimetag(Infinity) === false);
       assert(util.isTimetag(NaN) === false);
@@ -100,6 +105,7 @@ describe("util", function() {
     it("(value: any): boolean", function() {
       assert(util.isDouble(-1) === true);
       assert(util.isDouble(10) === true);
+      assert(util.isDouble(4294967295) === true);
       assert(util.isDouble(1.5) === true);
       assert(util.isDouble(Infinity) === true);
       assert(util.isDouble(NaN) === false);
