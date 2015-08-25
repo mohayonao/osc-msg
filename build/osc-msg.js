@@ -290,7 +290,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { var object = _x3, property = _x4, receiver = _x5; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { var object = _x3, property = _x4, receiver = _x5; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -300,7 +300,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _util = require("./util");
 
@@ -321,9 +321,11 @@ var _OSCElement2 = require("./OSCElement");
 var _OSCElement3 = _interopRequireDefault(_OSCElement2);
 
 var OSCBundle = (function (_OSCElement) {
+  _inherits(OSCBundle, _OSCElement);
+
   function OSCBundle() {
-    var timetag = arguments[0] === undefined ? 0 : arguments[0];
-    var elements = arguments[1] === undefined ? [] : arguments[1];
+    var timetag = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+    var elements = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
 
     _classCallCheck(this, OSCBundle);
 
@@ -336,8 +338,6 @@ var OSCBundle = (function (_OSCElement) {
     this.timetag = timetag;
     this.add.apply(this, _toConsumableArray(elements));
   }
-
-  _inherits(OSCBundle, _OSCElement);
 
   _createClass(OSCBundle, [{
     key: "add",
@@ -401,10 +401,10 @@ var OSCBundle = (function (_OSCElement) {
 
       return buffer;
     }
-  }, {
-    key: "_writeTo",
 
     // private methods
+  }, {
+    key: "_writeTo",
     value: function _writeTo(writer) {
       writer.writeString("#bundle");
       writer.writeInt64(this.timetag);
@@ -415,15 +415,15 @@ var OSCBundle = (function (_OSCElement) {
     }
   }, {
     key: "oscType",
-    get: function () {
+    get: function get() {
       return "bundle";
     }
   }, {
     key: "timetag",
-    get: function () {
+    get: function get() {
       return this._.timetag;
     },
-    set: function (value) {
+    set: function set(value) {
       if (!util.isTimetag(value)) {
         throw new Error("timetag must be an integer");
       }
@@ -431,11 +431,13 @@ var OSCBundle = (function (_OSCElement) {
     }
   }, {
     key: "size",
-    get: function () {
+    get: function get() {
       var result = 0;
 
-      result += 8; // "#bundle_"
-      result += 8; // timetag
+      // "#bundle_"
+      result += 8;
+      // timetag
+      result += 8;
       result += this._.elements.length * 4;
       result += this._.elements.reduce(function (a, b) {
         return a + b.size;
@@ -446,7 +448,7 @@ var OSCBundle = (function (_OSCElement) {
   }], [{
     key: "fromObject",
     value: function fromObject(obj) {
-      if (obj == null || typeof obj !== "object") {
+      if (typeof obj === "undefined" || typeof obj !== "object") {
         obj = {};
       }
       return new OSCBundle(obj.timetag, obj.elements);
@@ -523,12 +525,14 @@ var OSCElement = (function () {
     });
   }
 
+  // assign later
+
   _createClass(OSCElement, null, [{
     key: "fromObject",
     value: function fromObject(obj) {
       if (typeof obj === "string") {
         obj = { address: obj };
-      } else if (obj == null || typeof obj !== "object") {
+      } else if (typeof obj === "undefined" || typeof obj !== "object") {
         obj = { address: "" };
       }
 
@@ -559,8 +563,6 @@ var OSCElement = (function () {
 })();
 
 exports["default"] = OSCElement;
-
-// assign later
 OSCElement.OSCMessage = null;
 OSCElement.OSCBundle = null;
 module.exports = exports["default"];
@@ -574,7 +576,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { var object = _x3, property = _x4, receiver = _x5; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { var object = _x3, property = _x4, receiver = _x5; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -584,7 +586,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _util = require("./util");
 
@@ -609,9 +611,11 @@ var _OSCElement2 = require("./OSCElement");
 var _OSCElement3 = _interopRequireDefault(_OSCElement2);
 
 var OSCMessage = (function (_OSCElement) {
+  _inherits(OSCMessage, _OSCElement);
+
   function OSCMessage() {
-    var address = arguments[0] === undefined ? "" : arguments[0];
-    var args = arguments[1] === undefined ? [] : arguments[1];
+    var address = arguments.length <= 0 || arguments[0] === undefined ? "" : arguments[0];
+    var args = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
 
     _classCallCheck(this, OSCMessage);
 
@@ -625,8 +629,6 @@ var OSCMessage = (function (_OSCElement) {
     this.address = address;
     this.add.apply(this, _toConsumableArray(args));
   }
-
-  _inherits(OSCMessage, _OSCElement);
 
   _createClass(OSCMessage, [{
     key: "add",
@@ -644,8 +646,9 @@ var OSCMessage = (function (_OSCElement) {
           obj = { type: "array", value: obj };
         }
 
-        var type = obj.type;
-        var value = obj.value;
+        var _obj = obj;
+        var type = _obj.type;
+        var value = _obj.value;
 
         if (type === "array") {
           if (!Array.isArray(value)) {
@@ -703,11 +706,13 @@ var OSCMessage = (function (_OSCElement) {
 
       for (var i = 0; i < types.length; i++) {
         var tag = types[i];
+
         if (tag === "[") {
           stack.push(objArgs);
           objArgs = [];
         } else if (tag === "]") {
           var pop = stack.pop();
+
           pop.push({ type: "array", value: objArgs });
           objArgs = pop;
         } else {
@@ -736,10 +741,10 @@ var OSCMessage = (function (_OSCElement) {
 
       return buffer;
     }
-  }, {
-    key: "_convert",
 
     // private methods
+  }, {
+    key: "_convert",
     value: function _convert(value) {
       switch (typeof value) {
         case "number":
@@ -751,6 +756,8 @@ var OSCMessage = (function (_OSCElement) {
             return { type: "true", value: true };
           }
           return { type: "false", value: false };
+        default:
+        // do nothing
       }
       return { type: "null", value: null };
     }
@@ -766,15 +773,15 @@ var OSCMessage = (function (_OSCElement) {
     }
   }, {
     key: "oscType",
-    get: function () {
+    get: function get() {
       return "message";
     }
   }, {
     key: "address",
-    get: function () {
+    get: function get() {
       return this._.address;
     },
-    set: function (value) {
+    set: function set(value) {
       if (typeof value !== "string") {
         throw new Error("address must be string");
       }
@@ -782,12 +789,12 @@ var OSCMessage = (function (_OSCElement) {
     }
   }, {
     key: "types",
-    get: function () {
+    get: function get() {
       return this._.types;
     }
   }, {
     key: "size",
-    get: function () {
+    get: function get() {
       var result = 0;
 
       result += util.size4(this._.address.length + 1);
@@ -801,7 +808,7 @@ var OSCMessage = (function (_OSCElement) {
     value: function fromObject(obj) {
       if (typeof obj === "string") {
         obj = { address: obj };
-      } else if (obj == null || typeof obj !== "object") {
+      } else if (typeof obj === "undefined" || typeof obj !== "object") {
         obj = {};
       }
       return new OSCMessage(obj.address, obj.args);
@@ -826,6 +833,7 @@ var OSCMessage = (function (_OSCElement) {
 
       for (var i = 1; i < tags.length; i++) {
         var tag = tags[i];
+
         if (tag === "[") {
           stack.push(args);
           args = [];
@@ -834,10 +842,12 @@ var OSCMessage = (function (_OSCElement) {
             throw new Error("Unexpected token ']'");
           }
           var pop = stack.pop();
+
           pop.push({ type: "array", value: args });
           args = pop;
         } else {
           var type = Tag.tags[tag];
+
           if (!Tag.types.hasOwnProperty(type)) {
             throw new Error("Not supported tag '" + tag + "'");
           }
@@ -942,6 +952,7 @@ var Reader = (function () {
     value: function readInt64() {
       var hi = this.readUInt32();
       var lo = this.readUInt32();
+
       return hi * TWO_TO_THE_32 + lo;
     }
   }, {
@@ -969,7 +980,7 @@ var Reader = (function () {
       var result = "";
       var charCode = undefined;
 
-      while (this.hasNext() && (charCode = this.readUInt8()) !== 0) {
+      while (this.hasNext() && (charCode = this.readUInt8()) !== 0x00) {
         result += String.fromCharCode(charCode);
       }
       this.align();
@@ -999,7 +1010,7 @@ var Reader = (function () {
   }, {
     key: "align",
     value: function align() {
-      while (this.hasNext() && this.index % 4 !== 0 && this.view.getUint8(this.index) === 0) {
+      while (this.hasNext() && this.index % 4 !== 0 && this.view.getUint8(this.index) === 0x00) {
         this.index += 1;
       }
     }
@@ -1286,7 +1297,7 @@ var Writer = (function () {
     key: "align",
     value: function align() {
       while (this.index % 4 !== 0) {
-        this.writeUInt8(0);
+        this.writeUInt8(0x00);
       }
     }
   }]);
@@ -1321,7 +1332,7 @@ function isInteger(value) {
 }
 
 function isFloat(value) {
-  return value === value && typeof value === "number";
+  return !isNaN(value) && typeof value === "number";
 }
 
 function isString(value) {
@@ -1337,7 +1348,7 @@ function isTimetag(value) {
 }
 
 function isDouble(value) {
-  return value === value && typeof value === "number";
+  return !isNaN(value) && typeof value === "number";
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
