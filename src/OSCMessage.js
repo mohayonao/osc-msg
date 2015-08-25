@@ -21,7 +21,7 @@ export default class OSCMessage extends OSCElement {
   static fromObject(obj) {
     if (typeof obj === "string") {
       obj = { address: obj };
-    } else if (obj == null || typeof obj !== "object") {
+    } else if (typeof obj === "undefined" || typeof obj !== "object") {
       obj = {};
     }
     return new OSCMessage(obj.address, obj.args);
@@ -45,6 +45,7 @@ export default class OSCMessage extends OSCElement {
 
     for (let i = 1; i < tags.length; i++) {
       let tag = tags[i];
+
       if (tag === "[") {
         stack.push(args);
         args = [];
@@ -53,10 +54,12 @@ export default class OSCMessage extends OSCElement {
           throw new Error("Unexpected token ']'");
         }
         let pop = stack.pop();
+
         pop.push({ type: "array", value: args });
         args = pop;
       } else {
         let type = Tag.tags[tag];
+
         if (!Tag.types.hasOwnProperty(type)) {
           throw new Error(`Not supported tag '${tag}'`);
         }
@@ -167,11 +170,13 @@ export default class OSCMessage extends OSCElement {
 
     for (let i = 0; i < types.length; i++) {
       let tag = types[i];
+
       if (tag === "[") {
         stack.push(objArgs);
         objArgs = [];
       } else if (tag === "]") {
         let pop = stack.pop();
+
         pop.push({ type: "array", value: objArgs });
         objArgs = pop;
       } else {
@@ -203,15 +208,17 @@ export default class OSCMessage extends OSCElement {
   // private methods
   _convert(value) {
     switch (typeof value) {
-      case "number":
-        return { type: "float", value: value };
-      case "string":
-        return { type: "string", value: value };
-      case "boolean":
-        if (value) {
-          return { type: "true", value: true };
-        }
-        return { type: "false", value: false };
+    case "number":
+      return { type: "float", value: value };
+    case "string":
+      return { type: "string", value: value };
+    case "boolean":
+      if (value) {
+        return { type: "true", value: true };
+      }
+      return { type: "false", value: false };
+    default:
+      // do nothing
     }
     return { type: "null", value: null };
   }

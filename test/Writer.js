@@ -1,18 +1,23 @@
+/* eslint-disable no-inline-comments */
+
 import assert from "power-assert";
 import Writer from "../src/Writer";
 
+function fround(x) {
+  return new Float32Array([ x ])[0];
+}
+
 describe("Writer", function() {
-  describe("constructor", function() {
-    it("(buffer: Buffer|ArrayBuffer)", function() {
+  describe("constructor", () => {
+    it("(buffer: Buffer|ArrayBuffer)", () => {
       let buffer = new Uint8Array(8).buffer;
       let writer = new Writer(buffer);
 
       assert(writer instanceof Writer);
     });
   });
-
-  describe("#writeUInt8", function() {
-    it("(value: number): void", function() {
+  describe("#writeUInt8", () => {
+    it("(value: number): void", () => {
       let buffer = new Uint8Array(8).buffer;
       let writer = new Writer(buffer);
 
@@ -36,9 +41,8 @@ describe("Writer", function() {
       assert(writer.view.getUint8(7) === 0xff);
     });
   });
-
-  describe("#writeInt32", function() {
-    it("(value: number): void", function() {
+  describe("#writeInt32", () => {
+    it("(value: number): void", () => {
       let buffer = new Uint8Array(8).buffer;
       let writer = new Writer(buffer);
 
@@ -50,9 +54,8 @@ describe("Writer", function() {
       assert(writer.view.getInt32(4) === -1);
     });
   });
-
-  describe("#writeUInt32", function() {
-    it("(value: number): void", function() {
+  describe("#writeUInt32", () => {
+    it("(value: number): void", () => {
       let buffer = new Uint8Array(8).buffer;
       let writer = new Writer(buffer);
 
@@ -64,9 +67,8 @@ describe("Writer", function() {
       assert(writer.view.getUint32(4) === 4294967295);
     });
   });
-
-  describe("#writeFloat32", function() {
-    it("(value: number): void", function() {
+  describe("#writeFloat32", () => {
+    it("(value: number): void", () => {
       let buffer = new Uint8Array(8).buffer;
       let writer = new Writer(buffer);
 
@@ -74,13 +76,12 @@ describe("Writer", function() {
       writer.writeFloat32(5.678); // EOD
       writer.writeFloat32(0);
 
-      assert(writer.view.getFloat32(0) === Math.fround(1.234));
-      assert(writer.view.getFloat32(4) === Math.fround(5.678));
+      assert(writer.view.getFloat32(0) === fround(1.234));
+      assert(writer.view.getFloat32(4) === fround(5.678));
     });
   });
-
-  describe("#writeFloat64", function() {
-    it("(value: number): void", function() {
+  describe("#writeFloat64", () => {
+    it("(value: number): void", () => {
       let buffer = new Uint8Array(16).buffer;
       let writer = new Writer(buffer);
 
@@ -92,9 +93,8 @@ describe("Writer", function() {
       assert(writer.view.getFloat64(8) === 9.0123456);
     });
   });
-
-  describe("#writeString", function() {
-    it("(value: string): void", function() {
+  describe("#writeString", () => {
+    it("(value: string): void", () => {
       let buffer = new Uint8Array(16).buffer;
       let writer = new Writer(buffer);
 
@@ -121,9 +121,8 @@ describe("Writer", function() {
       assert(writer.view.getUint8(15) === 0x00);
     });
   });
-
-  describe("#writeBlob", function() {
-    it("(value: Buffer|ArrayBuffer): void", function() {
+  describe("#writeBlob", () => {
+    it("(value: Buffer|ArrayBuffer): void", () => {
       let buffer = new Uint8Array(32).buffer;
       let writer = new Writer(buffer);
 
@@ -149,9 +148,8 @@ describe("Writer", function() {
       assert(writer.view.getUint8(29) === 0x00);
     });
   });
-
-  describe("#hasNext", function() {
-    it("(): boolean", function() {
+  describe("#hasNext", () => {
+    it("(): boolean", () => {
       let buffer = new Uint8Array(4).buffer;
       let writer = new Writer(buffer);
 
@@ -164,9 +162,8 @@ describe("Writer", function() {
       assert(writer.hasError() === true);
     });
   });
-
-  describe("#hasNext", function() {
-    it("(): boolean", function() {
+  describe("#hasNext", () => {
+    it("(): boolean", () => {
       let buffer = new Uint8Array(8).buffer;
       let writer = new Writer(buffer);
 
@@ -179,5 +176,4 @@ describe("Writer", function() {
       assert(writer.hasNext() === false);
     });
   });
-
 });

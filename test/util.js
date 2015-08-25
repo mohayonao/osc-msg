@@ -2,8 +2,8 @@ import assert from "power-assert";
 import * as util from "../src/util";
 
 describe("util", function() {
-  describe(".size4", function() {
-    it("(num: number): number", function() {
+  describe(".size4", () => {
+    it("(num: number): number", () => {
       assert(util.size4(0) === 0);
       assert(util.size4(1) === 4);
       assert(util.size4(2) === 4);
@@ -15,9 +15,8 @@ describe("util", function() {
       assert(util.size4(8) === 8);
     });
   });
-
-  describe(".isInteger", function() {
-    it("(value: any): boolean", function() {
+  describe(".isInteger", () => {
+    it("(value: any): boolean", () => {
       assert(util.isInteger(-1) === true);
       assert(util.isInteger(10) === true);
       assert(util.isInteger(4294967295) === true);
@@ -32,9 +31,8 @@ describe("util", function() {
       assert(util.isInteger(new Uint8Array(0).buffer) === false);
     });
   });
-
-  describe(".isFloat", function() {
-    it("(value: any): boolean", function() {
+  describe(".isFloat", () => {
+    it("(value: any): boolean", () => {
       assert(util.isFloat(-1) === true);
       assert(util.isFloat(10) === true);
       assert(util.isFloat(4294967295) === true);
@@ -49,9 +47,8 @@ describe("util", function() {
       assert(util.isFloat(new Uint8Array(0).buffer) === false);
     });
   });
-
-  describe(".isString", function() {
-    it("(value: any): boolean", function() {
+  describe(".isString", () => {
+    it("(value: any): boolean", () => {
       assert(util.isString(-1) === false);
       assert(util.isString(10) === false);
       assert(util.isString(4294967295) === false);
@@ -66,9 +63,8 @@ describe("util", function() {
       assert(util.isString(new Uint8Array(0).buffer) === false);
     });
   });
-
-  describe(".isBlob", function() {
-    it("(value: any): boolean", function() {
+  describe(".isBlob", () => {
+    it("(value: any): boolean", () => {
       assert(util.isBlob(-1) === false);
       assert(util.isBlob(10) === false);
       assert(util.isBlob(4294967295) === false);
@@ -83,9 +79,8 @@ describe("util", function() {
       assert(util.isBlob(new Uint8Array(0).buffer) === true);
     });
   });
-
-  describe(".isTimetag", function() {
-    it("(value: any): boolean", function() {
+  describe(".isTimetag", () => {
+    it("(value: any): boolean", () => {
       assert(util.isTimetag(-1) === false);
       assert(util.isTimetag(10) === true);
       assert(util.isTimetag(4294967295) === true);
@@ -100,9 +95,8 @@ describe("util", function() {
       assert(util.isTimetag(new Uint8Array(0).buffer) === false);
     });
   });
-
-  describe(".isDouble", function() {
-    it("(value: any): boolean", function() {
+  describe(".isDouble", () => {
+    it("(value: any): boolean", () => {
       assert(util.isDouble(-1) === true);
       assert(util.isDouble(10) === true);
       assert(util.isDouble(4294967295) === true);

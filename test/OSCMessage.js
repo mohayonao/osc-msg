@@ -3,16 +3,15 @@ import oscmin from "osc-min";
 import OSCMessage from "../src/OSCMessage";
 
 describe("OSCMessage", function() {
-  describe("constructor", function() {
-    it("(address = '', args = [])", function() {
+  describe("constructor", () => {
+    it("(address = '', args = [])", () => {
       let msg = new OSCMessage();
 
       assert(msg instanceof OSCMessage);
     });
   });
-
-  describe(".fromObject", function() {
-    it("(obj: object <OSCMessage>): OSCMessage", function() {
+  describe(".fromObject", () => {
+    it("(obj: object <OSCMessage>): OSCMessage", () => {
       let msg = OSCMessage.fromObject({
         address: "/foo",
         args: [ 1, "foo!" ],
@@ -28,7 +27,7 @@ describe("OSCMessage", function() {
         oscType: "message",
       });
     });
-    it("(obj: string): OSCMessage", function() {
+    it("(obj: string): OSCMessage", () => {
       let msg = OSCMessage.fromObject("/foo");
 
       assert(msg instanceof OSCMessage);
@@ -38,7 +37,7 @@ describe("OSCMessage", function() {
         oscType: "message",
       });
     });
-    it("(obj: object <empy>): OSCMessage", function() {
+    it("(obj: object <empy>): OSCMessage", () => {
       let msg = OSCMessage.fromObject({});
 
       assert(msg instanceof OSCMessage);
@@ -48,7 +47,7 @@ describe("OSCMessage", function() {
         oscType: "message",
       });
     });
-    it("(obj: !object): OSCMessage", function() {
+    it("(obj: !object): OSCMessage", () => {
       let msg = OSCMessage.fromObject(0);
 
       assert(msg instanceof OSCMessage);
@@ -59,9 +58,8 @@ describe("OSCMessage", function() {
       });
     });
   });
-
-  describe(".fromBuffer", function() {
-    it("(buffer: Buffer|ArrayBuffer <args>): OSCMessage", function() {
+  describe(".fromBuffer", () => {
+    it("(buffer: Buffer|ArrayBuffer <args>): OSCMessage", () => {
       let data = {
         address: "/foo",
         args: [
@@ -83,7 +81,7 @@ describe("OSCMessage", function() {
       assert(msg instanceof OSCMessage);
       assert.deepEqual(msg.toObject(), data);
     });
-    it("(buffer: Buffer|ArryBuffer <address>): OSCMessage", function() {
+    it("(buffer: Buffer|ArryBuffer <address>): OSCMessage", () => {
       let msg = OSCMessage.fromBuffer(new Buffer("/foo"));
 
       assert(msg instanceof OSCMessage);
@@ -93,7 +91,7 @@ describe("OSCMessage", function() {
         oscType: "message",
       });
     });
-    it("(buffer: Buffer|ArryBuffer <empty>): OSCMessage", function() {
+    it("(buffer: Buffer|ArryBuffer <empty>): OSCMessage", () => {
       let msg = OSCMessage.fromBuffer(new Buffer(0));
 
       assert(msg instanceof OSCMessage);
@@ -103,7 +101,7 @@ describe("OSCMessage", function() {
         oscType: "message",
       });
     });
-    it("(buffer: !(Buffer|ArrayBuffer)): OSCMessage", function() {
+    it("(buffer: !(Buffer|ArrayBuffer)): OSCMessage", () => {
       let msg = OSCMessage.fromBuffer(0);
 
       assert(msg instanceof OSCMessage);
@@ -113,7 +111,7 @@ describe("OSCMessage", function() {
         oscType: "message",
       });
     });
-    it("(buffer: Buffer|ArrayBuffer <invalid tag>) throws Error", function() {
+    it("(buffer: Buffer|ArrayBuffer <invalid tag>) throws Error", () => {
       assert.throws(() => {
         OSCMessage.fromBuffer(new Buffer("/fo\0,*"));
       }, (e) => {
@@ -133,17 +131,15 @@ describe("OSCMessage", function() {
       });
     });
   });
-
-  describe("#oscType", function() {
-    it("get: string", function() {
+  describe("#oscType", () => {
+    it("get: string", () => {
       let msg = new OSCMessage();
 
       assert(msg.oscType === "message");
     });
   });
-
-  describe("#address", function() {
-    it("get/set: string", function() {
+  describe("#address", () => {
+    it("get/set: string", () => {
       let msg = new OSCMessage("/foo");
 
       assert(msg.address === "/foo");
@@ -159,8 +155,8 @@ describe("OSCMessage", function() {
     });
   });
 
-  describe("#types", function() {
-    it("get: string", function() {
+  describe("#types", () => {
+    it("get: string", () => {
       let msg = new OSCMessage();
 
       assert(msg.types === ",");
@@ -170,9 +166,8 @@ describe("OSCMessage", function() {
       assert(msg.types === ",fsTFN");
     });
   });
-
-  describe("#size", function() {
-    it("get: number", function() {
+  describe("#size", () => {
+    it("get: number", () => {
       let msg = new OSCMessage("/foo");
 
       assert(msg.size === 12);
@@ -191,9 +186,8 @@ describe("OSCMessage", function() {
       assert(msg.size === oscmin.toBuffer(msg.toObject()).length);
     });
   });
-
-  describe("#add", function() {
-    it("(...values: object): self", function() {
+  describe("#add", () => {
+    it("(...values: object): self", () => {
       let msg = new OSCMessage();
 
       msg.add(1, true, false, null,
@@ -206,8 +200,10 @@ describe("OSCMessage", function() {
 
       assert(msg.types === ",fTFNi[ss]I");
 
+      let UNDEFINED;
+
       assert.throws(() => {
-        msg.add({ type: "undefined", value: undefined });
+        msg.add({ type: "undefined", value: UNDEFINED });
       }, (e) => {
         return e instanceof Error && e.message === "Unsupport type: undefined";
       });
@@ -225,9 +221,8 @@ describe("OSCMessage", function() {
       });
     });
   });
-
-  describe("#clear", function() {
-    it("(): self", function() {
+  describe("#clear", () => {
+    it("(): self", () => {
       let msg = new OSCMessage("/foo", [ 1 ]);
 
       msg.clear();
@@ -237,9 +232,8 @@ describe("OSCMessage", function() {
       assert(msg.size === 8);
     });
   });
-
-  describe("#clone", function() {
-    it("(): OSCMessage", function() {
+  describe("#clone", () => {
+    it("(): OSCMessage", () => {
       let msg1 = new OSCMessage("/foo", [
         { type: "integer", value: 1 },
       ]);
@@ -249,9 +243,8 @@ describe("OSCMessage", function() {
       assert.deepEqual(msg1.toObject(), msg2.toObject());
     });
   });
-
-  describe("#toObject", function() {
-    it("(): object <OSCMessage>", function() {
+  describe("#toObject", () => {
+    it("(): object <OSCMessage>", () => {
       let msg = new OSCMessage("/foo", [ 1 ]);
       let obj = msg.toObject();
 
@@ -261,7 +254,7 @@ describe("OSCMessage", function() {
       assert(obj.oscType === "message");
       assert(!obj.hasOwnProperty("error"));
     });
-    it("(): object <OSCMessage:error>", function() {
+    it("(): object <OSCMessage:error>", () => {
       let msg = OSCMessage.fromBuffer(new Buffer("/foo\0\0\0\0,i"));
       let obj = msg.toObject();
 
@@ -272,24 +265,22 @@ describe("OSCMessage", function() {
       assert(obj.error === true);
     });
   });
-
-  describe("#toBuffer", function() {
-    it("(): Buffer|ArrayBuffer <OSCMessage>", function() {
+  describe("#toBuffer", () => {
+    it("(): Buffer|ArrayBuffer <OSCMessage>", () => {
       let msg = new OSCMessage("/foo", [ 1 ]);
 
       assert(msg.toBuffer() instanceof Buffer);
     });
   });
-
-  describe("osc-min compatible", function() {
-    it("empty message", function() {
+  describe("osc-min compatible", () => {
+    it("empty message", () => {
       let msg = new OSCMessage();
       let buffer = msg.toBuffer();
 
       assert(msg.toObject(), oscmin.fromBuffer(buffer));
       assert(msg.toBuffer(), oscmin.toBuffer(msg.toObject()));
     });
-    it("contains args", function() {
+    it("contains args", () => {
       let msg = new OSCMessage("/foo", [ 1, "foo!", true, false, null ]);
       let buffer = msg.toBuffer();
 
@@ -297,5 +288,4 @@ describe("OSCMessage", function() {
       assert(msg.toBuffer(), oscmin.toBuffer(msg.toObject()));
     });
   });
-
 });

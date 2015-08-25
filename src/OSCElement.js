@@ -11,7 +11,7 @@ export default class OSCElement {
   static fromObject(obj) {
     if (typeof obj === "string") {
       obj = { address: obj };
-    } else if (obj == null || typeof obj !== "object") {
+    } else if (typeof obj === "undefined" || typeof obj !== "object") {
       obj = { address: "" };
     }
 

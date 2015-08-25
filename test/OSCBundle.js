@@ -6,14 +6,13 @@ import OSCBundle from "../src/OSCBundle";
 const timetag = Date.now();
 
 describe("OSCBundle", function() {
-  describe("constructor", function() {
+  describe("constructor", () => {
     let bundle = new OSCBundle();
 
     assert(bundle instanceof OSCBundle);
   });
-
-  describe(".fromObject", function() {
-    it("(obj: object <OSCBundle>): OSCBundle", function() {
+  describe(".fromObject", () => {
+    it("(obj: object <OSCBundle>): OSCBundle", () => {
       let bundle = OSCBundle.fromObject({
         timetag: 1,
         elements: [
@@ -40,7 +39,7 @@ describe("OSCBundle", function() {
         oscType: "bundle",
       });
     });
-    it("(obj: object <empty>): OSCBundle", function() {
+    it("(obj: object <empty>): OSCBundle", () => {
       let bundle = OSCBundle.fromObject({});
 
       assert(bundle instanceof OSCBundle);
@@ -50,7 +49,7 @@ describe("OSCBundle", function() {
         oscType: "bundle",
       });
     });
-    it("(obj: !object): OSCBundle", function() {
+    it("(obj: !object): OSCBundle", () => {
       let bundle = OSCBundle.fromObject(0);
 
       assert(bundle instanceof OSCBundle);
@@ -61,9 +60,8 @@ describe("OSCBundle", function() {
       });
     });
   });
-
-  describe(".fromBuffer", function() {
-    it("(buffer: Buffer|ArrayBuffer <elements>): OSCBundle", function() {
+  describe(".fromBuffer", () => {
+    it("(buffer: Buffer|ArrayBuffer <elements>): OSCBundle", () => {
       let data = {
         timetag: 1,
         elements: [
@@ -96,7 +94,7 @@ describe("OSCBundle", function() {
       assert(bundle instanceof OSCBundle);
       assert.deepEqual(bundle.toObject(), data);
     });
-    it("(buffer: Buffer|ArrayBuffer <timetag>): OSCBundle", function() {
+    it("(buffer: Buffer|ArrayBuffer <timetag>): OSCBundle", () => {
       let data = {
         timetag: timetag,
         elements: [],
@@ -108,7 +106,7 @@ describe("OSCBundle", function() {
       assert(bundle instanceof OSCBundle);
       assert.deepEqual(bundle.toObject(), data);
     });
-    it("(buffer: Buffer|ArrayBuffer <empty>): OSCBundle", function() {
+    it("(buffer: Buffer|ArrayBuffer <empty>): OSCBundle", () => {
       let bundle = OSCBundle.fromBuffer(new Buffer(0));
 
       assert(bundle instanceof OSCBundle);
@@ -118,7 +116,7 @@ describe("OSCBundle", function() {
         oscType: "bundle",
       });
     });
-    it("(buffer: !(Buffer|ArrayBuffer)): OSCBundle", function() {
+    it("(buffer: !(Buffer|ArrayBuffer)): OSCBundle", () => {
       let bundle = OSCBundle.fromBuffer(0);
 
       assert(bundle instanceof OSCBundle);
@@ -129,17 +127,15 @@ describe("OSCBundle", function() {
       });
     });
   });
-
-  describe("#oscType", function() {
-    it("get: string", function() {
+  describe("#oscType", () => {
+    it("get: string", () => {
       let bundle = new OSCBundle();
 
       assert(bundle.oscType === "bundle");
     });
   });
-
-  describe("#timetag", function() {
-    it("get/set: number", function() {
+  describe("#timetag", () => {
+    it("get/set: number", () => {
       let bundle = new OSCBundle(12345);
 
       assert(bundle.timetag === 12345);
@@ -154,9 +150,8 @@ describe("OSCBundle", function() {
       });
     });
   });
-
-  describe("#size", function() {
-    it("get: number", function() {
+  describe("#size", () => {
+    it("get: number", () => {
       let bundle = new OSCBundle();
 
       assert(bundle.size === 16);
@@ -166,9 +161,8 @@ describe("OSCBundle", function() {
       assert(bundle.size === 28);
     });
   });
-
-  describe("#add", function() {
-    it("(...values: object): self", function() {
+  describe("#add", () => {
+    it("(...values: object): self", () => {
       let bundle = new OSCBundle();
 
       assert.deepEqual(bundle.toObject(), {
@@ -281,9 +275,8 @@ describe("OSCBundle", function() {
       });
     });
   });
-
-  describe("#clear", function() {
-    it("(): self", function() {
+  describe("#clear", () => {
+    it("(): self", () => {
       let bundle = new OSCBundle(timetag, [ "/foo" ]);
 
       bundle.clear();
@@ -296,9 +289,8 @@ describe("OSCBundle", function() {
       });
     });
   });
-
-  describe("#clone", function() {
-    it("(): OSCBundle", function() {
+  describe("#clone", () => {
+    it("(): OSCBundle", () => {
       let bundle1 = new OSCBundle(timetag, [ "/foo" ]);
       let bundle2 = bundle1.clone();
 
@@ -306,9 +298,8 @@ describe("OSCBundle", function() {
       assert.deepEqual(bundle1.toObject(), bundle2.toObject());
     });
   });
-
-  describe("#toObject", function() {
-    it("(): object <OSCBundle>", function() {
+  describe("#toObject", () => {
+    it("(): object <OSCBundle>", () => {
       let bundle = new OSCBundle(timetag, [ "/foo" ]);
       let obj = bundle.toObject();
 
@@ -318,7 +309,7 @@ describe("OSCBundle", function() {
       assert(obj.oscType === "bundle");
       assert(!obj.hasOwnProperty("error"));
     });
-    it("(): object <OSCBundle:error>", function() {
+    it("(): object <OSCBundle:error>", () => {
       let bundle = OSCBundle.fromBuffer(new Buffer("#bundle\0"));
       let obj = bundle.toObject();
 
@@ -329,24 +320,22 @@ describe("OSCBundle", function() {
       assert(obj.error === true);
     });
   });
-
-  describe("#toBuffer", function() {
-    it("(): Buffer|ArrayBuffer <OSCBundle>", function() {
+  describe("#toBuffer", () => {
+    it("(): Buffer|ArrayBuffer <OSCBundle>", () => {
       let bundle = new OSCBundle(timetag, [ "/foo" ]);
 
       assert(bundle.toBuffer() instanceof Buffer);
     });
   });
-
-  describe("osc-min compatible", function() {
-    it("empty bundle", function() {
+  describe("osc-min compatible", () => {
+    it("empty bundle", () => {
       let bundle = new OSCBundle();
       let buffer = bundle.toBuffer();
 
       assert(bundle.toObject(), oscmin.fromBuffer(buffer));
       assert(bundle.toBuffer(), oscmin.toBuffer(bundle.toObject()));
     });
-    it("contains messages", function() {
+    it("contains messages", () => {
       let bundle = new OSCBundle(timetag, [
         new OSCMessage("/foo", [ 1, 2, "foo!" ]),
         new OSCMessage("/bar", [ 3, 4, "bar!" ]),
@@ -356,7 +345,7 @@ describe("OSCBundle", function() {
       assert(bundle.toObject(), oscmin.fromBuffer(buffer));
       assert(bundle.toBuffer(), oscmin.toBuffer(bundle.toObject()));
     });
-    it("contains bundle", function() {
+    it("contains bundle", () => {
       let bundle = new OSCBundle(timetag, [
         new OSCBundle(timetag, [
           new OSCMessage("/foo", [ 1, 2, "foo!" ]),
@@ -372,5 +361,4 @@ describe("OSCBundle", function() {
       assert(bundle.toBuffer(), oscmin.toBuffer(bundle.toObject()));
     });
   });
-
 });
