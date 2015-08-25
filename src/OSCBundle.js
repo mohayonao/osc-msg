@@ -17,7 +17,7 @@ export default class OSCBundle extends OSCElement {
   }
 
   static fromObject(obj) {
-    if (obj == null || typeof obj !== "object") {
+    if (typeof obj === "undefined" || typeof obj !== "object") {
       obj = {};
     }
     return new OSCBundle(obj.timetag, obj.elements);
@@ -70,8 +70,10 @@ export default class OSCBundle extends OSCElement {
   get size() {
     let result = 0;
 
-    result += 8; // "#bundle_"
-    result += 8; // timetag
+    // "#bundle_"
+    result += 8;
+    // timetag
+    result += 8;
     result += this._.elements.length * 4;
     result += this._.elements.reduce((a, b) => a + b.size, 0);
 

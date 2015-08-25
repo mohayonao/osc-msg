@@ -1,17 +1,18 @@
+/* eslint-disable no-inline-comments */
+
 import assert from "power-assert";
 import Reader from "../src/Reader";
 
 describe("Reader", function() {
-  describe("constructor", function() {
-    it("(buffer: Buffer|ArrayBuffer)", function() {
+  describe("constructor", () => {
+    it("(buffer: Buffer|ArrayBuffer)", () => {
       let reader = new Reader(new Buffer(16));
 
       assert(reader instanceof Reader);
     });
   });
-
-  describe("#read", function() {
-    it("(length: number): Buffer|ArrayBuffer", function() {
+  describe("#read", () => {
+    it("(length: number): Buffer|ArrayBuffer", () => {
       let reader = new Reader(new Buffer([
         0x00, 0x00, 0x03, 0xe8,
         0xff, 0xff, 0xff, 0xff,
@@ -22,9 +23,8 @@ describe("Reader", function() {
       assert.deepEqual(reader.read(1 << 31), new Buffer(0));
     });
   });
-
-  describe("#readUInt8", function() {
-    it("(): number", function() {
+  describe("#readUInt8", () => {
+    it("(): number", () => {
       let reader = new Reader(new Buffer([
         0x00, 0x00, 0x03, 0xe8,
         0xff, 0xff, 0xff, 0xff,
@@ -41,22 +41,21 @@ describe("Reader", function() {
       assert(reader.readUInt8() === 0x00);
     });
   });
-
-  describe("#readInt32", function() {
-    it("(): number", function() {
+  describe("#readInt32", () => {
+    it("(): number", () => {
       let reader = new Reader(new Buffer([
         0x00, 0x00, 0x03, 0xe8, // int32 1000
         0xff, 0xff, 0xff, 0xff, // int32 -1
       ]));
 
       assert(reader.readInt32() === 1000);
-      assert(reader.readInt32() ===   -1); // EOD
-      assert(reader.readInt32() ===    0);
+      assert(reader.readInt32() === -1); // EOD
+      assert(reader.readInt32() === 0);
     });
   });
 
-  describe("#readUInt32", function() {
-    it("(): number", function() {
+  describe("#readUInt32", () => {
+    it("(): number", () => {
       let reader = new Reader(new Buffer([
         0x00, 0x00, 0x03, 0xe8, // uint32 1000
         0xff, 0xff, 0xff, 0xff, // uint32 4294967295
@@ -67,9 +66,8 @@ describe("Reader", function() {
       assert(reader.readUInt32() === 0);
     });
   });
-
-  describe("#readInt64", function() {
-    it("(): number", function() {
+  describe("#readInt64", () => {
+    it("(): number", () => {
       let reader = new Reader(new Buffer([
         0x00, 0x00, 0x03, 0xe8,
         0xff, 0xff, 0xff, 0xff,
@@ -79,9 +77,8 @@ describe("Reader", function() {
       assert(reader.readInt64() === 0);
     });
   });
-
-  describe("#readFloat32", function() {
-    it("(): number", function() {
+  describe("#readFloat32", () => {
+    it("(): number", () => {
       let reader = new Reader(new Buffer([
         0x3f, 0x9d, 0xf3, 0xb6, // float32 1.234
         0x40, 0xb5, 0xb2, 0x2d, // float32 5.678
@@ -93,8 +90,8 @@ describe("Reader", function() {
     });
   });
 
-  describe("#readFloat64", function() {
-    it("(): number", function() {
+  describe("#readFloat64", () => {
+    it("(): number", () => {
       let reader = new Reader(new Buffer([
         0x3f, 0xf3, 0xc0, 0xca,
         0x2a, 0x5b, 0x1d, 0x5d, // float64 1.2345678
@@ -107,9 +104,8 @@ describe("Reader", function() {
       assert(reader.readFloat64() === 0);
     });
   });
-
-  describe("#readString", function() {
-    it("(): string", function() {
+  describe("#readString", () => {
+    it("(): string", () => {
       let reader = new Reader(new Buffer([
         0x2f, 0x66, 0x6f, 0x6f, // "/foo"
         0x00, 0x00, 0x00, 0x00,
@@ -122,9 +118,8 @@ describe("Reader", function() {
       assert(reader.readString() === "");
     });
   });
-
-  describe("#readBlob", function() {
-    it("(): Buffer|ArrayBuffer", function() {
+  describe("#readBlob", () => {
+    it("(): Buffer|ArrayBuffer", () => {
       let reader = new Reader(new Buffer([
         0x00, 0x00, 0x00, 0x06, // size = 6
         0x01, 0x02, 0x03, 0x04, // Buffer([ 0x01, 0x02, 0x03, 0x04, 0x05, 0x06 ])
@@ -141,9 +136,8 @@ describe("Reader", function() {
       assert.deepEqual(reader.readBlob(), new Buffer(0));
     });
   });
-
-  describe("#hasError", function() {
-    it("(): boolean", function() {
+  describe("#hasError", () => {
+    it("(): boolean", () => {
       let reader = new Reader(new Buffer(4));
 
       assert(reader.hasError() === false);
@@ -155,9 +149,8 @@ describe("Reader", function() {
       assert(reader.hasError() === true);
     });
   });
-
-  describe("#hasNext", function() {
-    it("(): boolean", function() {
+  describe("#hasNext", () => {
+    it("(): boolean", () => {
       let reader = new Reader(new Buffer(8));
 
       assert(reader.hasNext() === true);

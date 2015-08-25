@@ -56,6 +56,7 @@ export default class Reader {
   readInt64() {
     let hi = this.readUInt32();
     let lo = this.readUInt32();
+
     return hi * TWO_TO_THE_32 + lo;
   }
 

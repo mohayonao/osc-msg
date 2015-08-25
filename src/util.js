@@ -7,7 +7,7 @@ export function isInteger(value) {
 }
 
 export function isFloat(value) {
-  return value === value && typeof value === "number";
+  return !isNaN(value) && typeof value === "number";
 }
 
 export function isString(value) {
@@ -23,5 +23,5 @@ export function isTimetag(value) {
 }
 
 export function isDouble(value) {
-  return value === value && typeof value === "number";
+  return !isNaN(value) && typeof value === "number";
 }

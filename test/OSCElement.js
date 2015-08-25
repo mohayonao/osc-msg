@@ -5,8 +5,8 @@ import OSCMessage from "../src/OSCMessage";
 import OSCBundle from "../src/OSCBundle";
 
 describe("OSCElement", function() {
-  describe(".fromObject", function() {
-    it("(): OSCMessage", function() {
+  describe(".fromObject", () => {
+    it("(): OSCMessage", () => {
       let msg = OSCElement.fromObject();
 
       assert(msg instanceof OSCMessage);
@@ -16,7 +16,7 @@ describe("OSCElement", function() {
         oscType: "message",
       });
     });
-    it("(obj: string): OSCMessage", function() {
+    it("(obj: string): OSCMessage", () => {
       let msg = OSCElement.fromObject("/foo");
 
       assert(msg instanceof OSCMessage);
@@ -26,7 +26,7 @@ describe("OSCElement", function() {
         oscType: "message",
       });
     });
-    it("(obj: { address: string }): OSCMessage", function() {
+    it("(obj: { address: string }): OSCMessage", () => {
       let msg = OSCElement.fromObject({
         address: "/foo",
       });
@@ -38,7 +38,7 @@ describe("OSCElement", function() {
         oscType: "message",
       });
     });
-    it("(obj: {}): OSCMessage", function() {
+    it("(obj: {}): OSCMessage", () => {
       let msg = OSCElement.fromObject({});
 
       assert(msg instanceof OSCMessage);
@@ -48,7 +48,7 @@ describe("OSCElement", function() {
         oscType: "message",
       });
     });
-    it("(obj: { timetag: number }): OSCBundle", function() {
+    it("(obj: { timetag: number }): OSCBundle", () => {
       let msg = OSCElement.fromObject({
         timetag: 12345,
       });
@@ -61,9 +61,8 @@ describe("OSCElement", function() {
       });
     });
   });
-
-  describe(".fromBuffer", function() {
-    it("(): OSCMessage", function() {
+  describe(".fromBuffer", () => {
+    it("(): OSCMessage", () => {
       let msg = OSCElement.fromBuffer();
 
       assert(msg instanceof OSCMessage);
@@ -73,7 +72,7 @@ describe("OSCElement", function() {
         oscType: "message",
       });
     });
-    it("(buffer: Buffer|ArrayBuffer): OSCMessage", function() {
+    it("(buffer: Buffer|ArrayBuffer): OSCMessage", () => {
       let buffer = oscmin.toBuffer({ address: "/foo" });
       let msg = OSCElement.fromBuffer(buffer);
 
@@ -84,7 +83,7 @@ describe("OSCElement", function() {
         oscType: "message",
       });
     });
-    it("(buffer: Buffer|ArrayBuffer): OSCBundle", function() {
+    it("(buffer: Buffer|ArrayBuffer): OSCBundle", () => {
       let buffer = oscmin.toBuffer({ timetag: 12345 });
       let msg = OSCElement.fromBuffer(buffer);
 

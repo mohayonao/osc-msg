@@ -4,14 +4,14 @@ import Reader from "../src/Reader";
 import { types, tags } from "../src/Tag";
 
 describe("Tag", function() {
-  beforeEach(function() {
+  beforeEach(() => {
     let buffer = new Buffer(16);
+
     this.writer = new Writer(buffer);
     this.reader = new Reader(buffer);
   });
-
-  describe(":integer", function() {
-    it("works", function() {
+  describe(":integer", () => {
+    it("works", () => {
       assert(types.integer.tag === "i");
       assert(types.integer.size() === 4);
       assert(types.integer.validate(1) === true);
@@ -22,8 +22,8 @@ describe("Tag", function() {
       assert(tags.i === "integer");
     });
   });
-  describe(":float", function() {
-    it("works", function() {
+  describe(":float", () => {
+    it("works", () => {
       assert(types.float.tag === "f");
       assert(types.float.size() === 4);
       assert(types.float.validate(1.5) === true);
@@ -34,8 +34,8 @@ describe("Tag", function() {
       assert(tags.f === "float");
     });
   });
-  describe(":string", function() {
-    it("works", function() {
+  describe(":string", () => {
+    it("works", () => {
       assert(types.string.tag === "s");
       assert(types.string.size("foo") === 4);
       assert(types.string.size("quux") === 8);
@@ -47,8 +47,8 @@ describe("Tag", function() {
       assert(tags.s === "string");
     });
   });
-  describe(":blob", function() {
-    it("works", function() {
+  describe(":blob", () => {
+    it("works", () => {
       assert(types.blob.tag === "b");
       assert(types.blob.size(new Buffer(6)) === 12);
       assert(types.blob.size(new Buffer(8)) === 12);
@@ -61,8 +61,8 @@ describe("Tag", function() {
       assert(tags.b === "blob");
     });
   });
-  describe(":timetag", function() {
-    it("works", function() {
+  describe(":timetag", () => {
+    it("works", () => {
       let now = Date.now();
 
       assert(types.timetag.tag === "t");
@@ -75,8 +75,8 @@ describe("Tag", function() {
       assert(tags.t === "timetag");
     });
   });
-  describe(":double", function() {
-    it("works", function() {
+  describe(":double", () => {
+    it("works", () => {
       assert(types.double.tag === "d");
       assert(types.double.size() === 8);
       assert(types.double.validate(1.5) === true);
@@ -87,8 +87,8 @@ describe("Tag", function() {
       assert(tags.d === "double");
     });
   });
-  describe(":true", function() {
-    it("works", function() {
+  describe(":true", () => {
+    it("works", () => {
       assert(types.true.tag === "T");
       assert(types.true.size() === 0);
       assert(types.true.validate(true) === true);
@@ -99,8 +99,8 @@ describe("Tag", function() {
       assert(tags.T === "true");
     });
   });
-  describe(":false", function() {
-    it("works", function() {
+  describe(":false", () => {
+    it("works", () => {
       assert(types.false.tag === "F");
       assert(types.false.size() === 0);
       assert(types.false.validate(false) === true);
@@ -111,8 +111,8 @@ describe("Tag", function() {
       assert(tags.F === "false");
     });
   });
-  describe(":null", function() {
-    it("works", function() {
+  describe(":null", () => {
+    it("works", () => {
       assert(types.null.tag === "N");
       assert(types.null.size() === 0);
       assert(types.null.validate(null) === true);
@@ -123,8 +123,8 @@ describe("Tag", function() {
       assert(tags.N === "null");
     });
   });
-  describe(":bang", function() {
-    it("works", function() {
+  describe(":bang", () => {
+    it("works", () => {
       assert(types.bang.tag === "I");
       assert(types.bang.size() === 0);
       assert(types.bang.validate("bang") === true);
