@@ -3,6 +3,10 @@ import Writer from "../src/Writer";
 import Reader from "../src/Reader";
 import { types, tags } from "../src/Tag";
 
+function fround(x) {
+  return new Float32Array([ x ])[0];
+}
+
 describe("Tag", function() {
   beforeEach(() => {
     let buffer = new Buffer(16);
@@ -29,7 +33,7 @@ describe("Tag", function() {
       assert(types.float.validate(1.5) === true);
 
       types.float.write(this.writer, 1.234);
-      assert(types.float.read(this.reader) === Math.fround(1.234));
+      assert(types.float.read(this.reader) === fround(1.234));
 
       assert(tags.f === "float");
     });

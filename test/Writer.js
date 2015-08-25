@@ -3,6 +3,10 @@
 import assert from "power-assert";
 import Writer from "../src/Writer";
 
+function fround(x) {
+  return new Float32Array([ x ])[0];
+}
+
 describe("Writer", function() {
   describe("constructor", () => {
     it("(buffer: Buffer|ArrayBuffer)", () => {
@@ -72,8 +76,8 @@ describe("Writer", function() {
       writer.writeFloat32(5.678); // EOD
       writer.writeFloat32(0);
 
-      assert(writer.view.getFloat32(0) === Math.fround(1.234));
-      assert(writer.view.getFloat32(4) === Math.fround(5.678));
+      assert(writer.view.getFloat32(0) === fround(1.234));
+      assert(writer.view.getFloat32(4) === fround(5.678));
     });
   });
   describe("#writeFloat64", () => {
