@@ -1,6 +1,6 @@
 {
   "name": "osc-msg",
-  "description": "Isomorphic JavaScript library for message of Open Sound Control",
+  "description": "OSC message decoder/encoder with fault tolerant",
   "version": "0.2.3",
   "author": "Nao Yonamine <mohayonao@gmail.com>",
   "bugs": {
@@ -29,9 +29,10 @@
   ],
   "homepage": "http://mohayonao.github.io/osc-msg/",
   "keywords": [
-    "isomorphic",
+    "open sound control",
+    "osc",
     "message",
-    "osc"
+    "serialize"
   ],
   "license": "MIT",
   "main": "index.js",
