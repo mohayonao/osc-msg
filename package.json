@@ -10,17 +10,16 @@
     "dataview2": "^1.0.0"
   },
   "devDependencies": {
-    "babel": "^5.8.21",
-    "babel-eslint": "^4.0.10",
-    "babelify": "^6.2.0",
-    "browserify": "^11.0.1",
-    "eslint": "^1.2.1",
-    "espower-babel": "^3.2.0",
-    "isparta": "^3.0.3",
-    "mocha": "^2.2.5",
+    "babel": "^5.8.34",
+    "babel-eslint": "^4.1.6",
+    "eslint": "^1.10.3",
+    "eslint-config-mohayonao": "^0.1.0",
+    "espower-babel": "^3.3.0",
+    "isparta": "^3.5.3",
+    "lodash.flatten": "^3.0.2",
+    "mocha": "^2.3.4",
     "osc-min": "^0.2.0",
-    "power-assert": "^0.11.0",
-    "uglify-js": "^2.4.24"
+    "power-assert": "^1.2.0"
   },
   "files": [
     "package.json",
@@ -40,13 +39,11 @@
     "url": "git://github.com/mohayonao/osc-msg.git"
   },
   "scripts": {
-    "build": "npm run build-to5 && npm run build-browser && npm run build-minify",
-    "build-browser": "browserify src -t babelify --standalone OscMsg --outfile build/osc-msg.js",
-    "build-minify": "uglifyjs build/osc-msg.js -o build/osc-msg.min.js",
-    "build-to5": "babel src --out-dir lib",
+    "build": "babel src --out-dir lib",
     "cover": "babel-node $(npm bin)/isparta cover --report text --report html _mocha",
     "lint": "eslint src test",
-    "prepublish": "rm -rf lib && npm run lint && npm run test && npm run build-to5",
+    "prepublish": "rm -rf lib && npm run lint && npm run test && npm run build",
+    "preversion": "npm run lint && npm run test",
     "test": "mocha --compilers js:espower-babel/guess",
     "travis": "npm run lint && npm run test"
   }
