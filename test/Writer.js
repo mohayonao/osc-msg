@@ -3,21 +3,17 @@
 import assert from "power-assert";
 import Writer from "../src/Writer";
 
-function fround(x) {
-  return new Float32Array([ x ])[0];
-}
-
-describe("Writer", function() {
-  describe("constructor", () => {
-    it("(buffer: Buffer|ArrayBuffer)", () => {
+describe("Writer", () => {
+  describe("constructor(buffer: Buffer|ArrayBuffer)", () => {
+    it("works", () => {
       let buffer = new Uint8Array(8).buffer;
       let writer = new Writer(buffer);
 
       assert(writer instanceof Writer);
     });
   });
-  describe("#writeUInt8", () => {
-    it("(value: number): void", () => {
+  describe("#writeUInt8(value: number): void", () => {
+    it("works", () => {
       let buffer = new Uint8Array(8).buffer;
       let writer = new Writer(buffer);
 
@@ -29,7 +25,9 @@ describe("Writer", function() {
       writer.writeUInt8(0xff);
       writer.writeUInt8(0xff);
       writer.writeUInt8(0xff); // EOD
+      assert(writer.hasError() === false);
       writer.writeUInt8(0x00);
+      assert(writer.hasError() === true);
 
       assert(writer.view.getUint8(0) === 0x00);
       assert(writer.view.getUint8(1) === 0x00);
@@ -41,66 +39,76 @@ describe("Writer", function() {
       assert(writer.view.getUint8(7) === 0xff);
     });
   });
-  describe("#writeInt32", () => {
-    it("(value: number): void", () => {
+  describe("#writeInt32(value: number): void", () => {
+    it("works", () => {
       let buffer = new Uint8Array(8).buffer;
       let writer = new Writer(buffer);
 
       writer.writeInt32(1000);
       writer.writeInt32(-1); // EOD
+      assert(writer.hasError() === false);
       writer.writeInt32(0);
+      assert(writer.hasError() === true);
 
       assert(writer.view.getInt32(0) === 1000);
       assert(writer.view.getInt32(4) === -1);
     });
   });
-  describe("#writeUInt32", () => {
-    it("(value: number): void", () => {
+  describe("#writeUInt32(value: number): void", () => {
+    it("works", () => {
       let buffer = new Uint8Array(8).buffer;
       let writer = new Writer(buffer);
 
       writer.writeUInt32(1000);
       writer.writeUInt32(4294967295); // EOD
+      assert(writer.hasError() === false);
       writer.writeUInt32(0);
+      assert(writer.hasError() === true);
 
       assert(writer.view.getUint32(0) === 1000);
       assert(writer.view.getUint32(4) === 4294967295);
     });
   });
-  describe("#writeFloat32", () => {
-    it("(value: number): void", () => {
+  describe("#writeFloat32(value: number): void", () => {
+    it("works", () => {
       let buffer = new Uint8Array(8).buffer;
       let writer = new Writer(buffer);
 
       writer.writeFloat32(1.234);
       writer.writeFloat32(5.678); // EOD
+      assert(writer.hasError() === false);
       writer.writeFloat32(0);
+      assert(writer.hasError() === true);
 
-      assert(writer.view.getFloat32(0) === fround(1.234));
-      assert(writer.view.getFloat32(4) === fround(5.678));
+      assert(writer.view.getFloat32(0) === Math.fround(1.234));
+      assert(writer.view.getFloat32(4) === Math.fround(5.678));
     });
   });
-  describe("#writeFloat64", () => {
-    it("(value: number): void", () => {
+  describe("#writeFloat64(value: number): void", () => {
+    it("works", () => {
       let buffer = new Uint8Array(16).buffer;
       let writer = new Writer(buffer);
 
       writer.writeFloat64(1.2345678);
       writer.writeFloat64(9.0123456); // EOD
+      assert(writer.hasError() === false);
       writer.writeFloat64(0);
+      assert(writer.hasError() === true);
 
       assert(writer.view.getFloat64(0) === 1.2345678);
       assert(writer.view.getFloat64(8) === 9.0123456);
     });
   });
-  describe("#writeString", () => {
-    it("(value: string): void", () => {
+  describe("#writeString(value: string): void", () => {
+    it("works", () => {
       let buffer = new Uint8Array(16).buffer;
       let writer = new Writer(buffer);
 
       writer.writeString("/foo");
       writer.writeString(",iisff");
+      assert(writer.hasError() === false);
       writer.writeString("foobar");
+      assert(writer.hasError() === true);
 
       assert(writer.view.getUint8(0) === 0x2f); // "/foo"
       assert(writer.view.getUint8(1) === 0x66);
@@ -121,15 +129,16 @@ describe("Writer", function() {
       assert(writer.view.getUint8(15) === 0x00);
     });
   });
-  describe("#writeBlob", () => {
-    it("(value: Buffer|ArrayBuffer): void", () => {
+  describe("#writeBlob(value: Buffer|ArrayBuffer): void", () => {
+    it("works", () => {
       let buffer = new Uint8Array(32).buffer;
       let writer = new Writer(buffer);
 
       writer.writeBlob(new Buffer([ 0x01, 0x02, 0x03, 0x04, 0x05, 0x06 ]));
       writer.writeBlob(new Buffer([ 0x07, 0x08, 0x09, 0x00 ])); // EOD
+      assert(writer.hasError() === false);
       writer.writeBlob(new Buffer([ 0x0a, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ]));
-
+      assert(writer.hasError() === true);
 
       assert(writer.view.getUint32(0) === 6); // size = 6
       assert(writer.view.getUint8(4) === 0x01);
@@ -148,8 +157,8 @@ describe("Writer", function() {
       assert(writer.view.getUint8(29) === 0x00);
     });
   });
-  describe("#hasNext", () => {
-    it("(): boolean", () => {
+  describe("#hasNext(): boolean", () => {
+    it("works", () => {
       let buffer = new Uint8Array(4).buffer;
       let writer = new Writer(buffer);
 
@@ -162,8 +171,8 @@ describe("Writer", function() {
       assert(writer.hasError() === true);
     });
   });
-  describe("#hasNext", () => {
-    it("(): boolean", () => {
+  describe("#hasNext(): boolean", () => {
+    it("works", () => {
       let buffer = new Uint8Array(8).buffer;
       let writer = new Writer(buffer);
 

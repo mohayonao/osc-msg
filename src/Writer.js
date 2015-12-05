@@ -5,35 +5,39 @@ const TWO_TO_THE_32 = Math.pow(2, 32);
 export default class Writer {
   constructor(buffer) {
     this.view = new DataView2(buffer);
-    this.index = 0;
-    this.error = false;
+
+    this._index = 0;
+    this._hasError = false;
   }
 
   writeUInt8(value) {
-    this.index += 1;
-    if (this.view.byteLength < this.index) {
-      this.error = true;
-      return;
+    this._index += 1;
+
+    if (this._index <= this.view.byteLength) {
+      this.view.setUint8(this._index - 1, value);
+    } else {
+      this._hasError = true;
     }
-    this.view.setUint8(this.index - 1, value);
   }
 
   writeInt32(value) {
-    this.index += 4;
-    if (this.view.byteLength < this.index) {
-      this.error = true;
-      return;
+    this._index += 4;
+
+    if (this._index <= this.view.byteLength) {
+      this.view.setInt32(this._index - 4, value);
+    } else {
+      this._hasError = true;
     }
-    this.view.setInt32(this.index - 4, value);
   }
 
   writeUInt32(value) {
-    this.index += 4;
-    if (this.view.byteLength < this.index) {
-      this.error = true;
-      return;
+    this._index += 4;
+
+    if (this._index <= this.view.byteLength) {
+      this.view.setUint32(this._index - 4, value);
+    } else {
+      this._hasError = true;
     }
-    this.view.setUint32(this.index - 4, value);
   }
 
   writeInt64(value) {
@@ -45,21 +49,23 @@ export default class Writer {
   }
 
   writeFloat32(value) {
-    this.index += 4;
-    if (this.view.byteLength < this.index) {
-      this.error = true;
-      return;
+    this._index += 4;
+
+    if (this._index <= this.view.byteLength) {
+      this.view.setFloat32(this._index - 4, value);
+    } else {
+      this._hasError = true;
     }
-    this.view.setFloat32(this.index - 4, value);
   }
 
   writeFloat64(value) {
-    this.index += 8;
-    if (this.view.byteLength < this.index) {
-      this.error = true;
-      return;
+    this._index += 8;
+
+    if (this._index <= this.view.byteLength) {
+      this.view.setFloat64(this._index - 8, value);
+    } else {
+      this._hasError = true;
     }
-    this.view.setFloat64(this.index - 8, value);
   }
 
   writeString(value) {
@@ -68,7 +74,7 @@ export default class Writer {
     }
 
     this.writeUInt8(0);
-    this.align();
+    this._align();
   }
 
   writeBlob(value) {
@@ -81,19 +87,19 @@ export default class Writer {
       this.writeUInt8(view.getUint8(i));
     }
 
-    this.align();
+    this._align();
   }
 
   hasError() {
-    return this.error;
+    return this._hasError;
   }
 
   hasNext() {
-    return this.index < this.view.byteLength;
+    return this._index < this.view.byteLength;
   }
 
-  align() {
-    while (this.index % 4 !== 0) {
+  _align() {
+    while (this._index % 4 !== 0) {
       this.writeUInt8(0x00);
     }
   }
