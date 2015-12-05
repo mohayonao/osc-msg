@@ -5,52 +5,65 @@ const TWO_TO_THE_32 = Math.pow(2, 32);
 export default class Reader {
   constructor(buffer) {
     this.view = new DataView2(buffer);
-    this.index = 0;
-    this.error = false;
+
+    this._index = 0;
+    this._hasError = false;
   }
 
   read(length) {
-    if (this.view.byteLength < this.index + length) {
-      this.index += length;
-      this.error = true;
-      return new Buffer2(0);
+    length >>>= 0;
+
+    if (this._index + length <= this.view.byteLength) {
+      let buffer = new Buffer2(length);
+      let view = new DataView2(buffer);
+
+      for (let i = 0; i < length; i++) {
+        view.setUint8(i, this.readUInt8());
+      }
+
+      return buffer;
     }
 
-    let buffer = new Buffer2(length);
-    let view = new DataView2(buffer);
+    this._index += length;
+    this._hasError = true;
 
-    for (let i = 0; i < length; i++) {
-      view.setUint8(i, this.readUInt8());
-    }
-
-    return buffer;
+    return new Buffer2(0);
   }
 
   readUInt8() {
-    this.index += 1;
-    if (this.view.byteLength < this.index) {
-      this.error = true;
-      return 0;
+    this._index += 1;
+
+    if (this._index <= this.view.byteLength) {
+      return this.view.getUint8(this._index - 1);
     }
-    return this.view.getUint8(this.index - 1);
+
+    this._hasError = true;
+
+    return 0;
   }
 
   readInt32() {
-    this.index += 4;
-    if (this.view.byteLength < this.index) {
-      this.error = true;
-      return 0;
+    this._index += 4;
+
+    if (this._index <= this.view.byteLength) {
+      return this.view.getInt32(this._index - 4);
     }
-    return this.view.getInt32(this.index - 4);
+
+    this._hasError = true;
+
+    return 0;
   }
 
   readUInt32() {
-    this.index += 4;
-    if (this.view.byteLength < this.index) {
-      this.error = true;
-      return 0;
+    this._index += 4;
+
+    if (this._index <= this.view.byteLength) {
+      return this.view.getUint32(this._index - 4);
     }
-    return this.view.getUint32(this.index - 4);
+
+    this._hasError = true;
+
+    return 0;
   }
 
   readInt64() {
@@ -61,30 +74,41 @@ export default class Reader {
   }
 
   readFloat32() {
-    this.index += 4;
-    if (this.view.byteLength < this.index) {
-      return 0;
+    this._index += 4;
+
+    if (this._index <= this.view.byteLength) {
+      return this.view.getFloat32(this._index - 4);
     }
-    return this.view.getFloat32(this.index - 4);
+
+    this._hasError = true;
+
+    return 0;
   }
 
   readFloat64() {
-    this.index += 8;
-    if (this.view.byteLength < this.index) {
-      this.error = true;
-      return 0;
+    this._index += 8;
+
+    if (this._index <= this.view.byteLength) {
+      return this.view.getFloat64(this._index - 8);
     }
-    return this.view.getFloat64(this.index - 8);
+
+    this._hasError = true;
+
+    return 0;
   }
 
   readString() {
     let result = "";
     let charCode;
 
-    while (this.hasNext() && (charCode = this.readUInt8()) !== 0x00) {
-      result += String.fromCharCode(charCode);
+    if (this.hasNext()) {
+      while (this.hasNext() && (charCode = this.readUInt8()) !== 0x00) {
+        result += String.fromCharCode(charCode);
+      }
+      this._align();
+    } else {
+      this._hasError = true;
     }
-    this.align();
 
     return result;
   }
@@ -93,22 +117,22 @@ export default class Reader {
     let length = this.readUInt32();
     let buffer = this.read(length);
 
-    this.align();
+    this._align();
 
     return buffer;
   }
 
   hasError() {
-    return this.error;
+    return this._hasError;
   }
 
   hasNext() {
-    return this.index < this.view.byteLength;
+    return this._index < this.view.byteLength;
   }
 
-  align() {
-    while (this.hasNext() && this.index % 4 !== 0 && this.view.getUint8(this.index) === 0x00) {
-      this.index += 1;
+  _align() {
+    while (this.hasNext() && this._index % 4 !== 0 && this.view.getUint8(this._index) === 0x00) {
+      this._index += 1;
     }
   }
 }
