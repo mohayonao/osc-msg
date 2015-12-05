@@ -23,6 +23,7 @@
   },
   "files": [
     "package.json",
+    "index.js",
     "lib",
     "README.md"
   ],
@@ -33,7 +34,7 @@
     "osc"
   ],
   "license": "MIT",
-  "main": "lib/index.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/mohayonao/osc-msg.git"
