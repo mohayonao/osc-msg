@@ -7,7 +7,7 @@
     "url": "https://github.com/mohayonao/osc-msg/issues"
   },
   "dependencies": {
-    "dataview2": "^0.1.0"
+    "dataview2": "^1.0.0"
   },
   "devDependencies": {
     "babel": "^5.8.21",
