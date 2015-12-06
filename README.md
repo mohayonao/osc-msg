@@ -1,14 +1,13 @@
 # osc-msg
 [![Build Status](http://img.shields.io/travis/mohayonao/osc-msg.svg?style=flat-square)](https://travis-ci.org/mohayonao/osc-msg)
 [![NPM Version](http://img.shields.io/npm/v/osc-msg.svg?style=flat-square)](https://www.npmjs.org/package/osc-msg)
-[![Bower](http://img.shields.io/bower/v/osc-msg.svg?style=flat-square)](http://bower.io/search/?q=osc-msg)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](http://mohayonao.mit-license.org/)
 
-> Isomorphic JavaScript library for message of Open Sound Control
+> OSC message decoder/encoder with fault tolerant
 
 ## Features
-- Works in both Node.js / io.js and browsers
-- Durable for broken messages
+- Works in both Node.js and browsers
+- Not throw an exception if processing with broken messages
 
 ## Installation
 
@@ -18,127 +17,106 @@ npm:
 npm install osc-msg
 ```
 
-bower:
-
-```
-bower install osc-msg
-```
-
-downloads:
-
-- [osc-msg.js](https://raw.githubusercontent.com/mohayonao/osc-msg/master/build/osc-msg.js)
-- [osc-msg.min.js](https://raw.githubusercontent.com/mohayonao/osc-msg/master/build/osc-msg.min.js)
-
 ## API
 
-_compatible interfaces with [osc-min](https://github.com/russellmcc/node-osc-min)_
-- `OscMsg.fromBuffer(buffer: Buffer|ArrayBuffer): object`
-- `OscMsg.toBuffer(obj: object): Buffer|ArrayBuffer`
-
-### OSCMessage
-- `constructor([ address: string ], [ args: object[] ])`
-
-##### Class methods
-- `fromObject(obj: object): OSCMessage`
-- `fromBuffer(buffer: Buffer|ArrayBuffer): OSCMessage`
-
-##### Instance attributes
-- `address: string`
-- `size: number` _readonly_
-- `oscType: string` _readonly_
-
-##### Instance methods
-- `add(...values: any): self`
-- `clear(): self`
-- `clone(): OSCMessage`
-- `toObject(): object`
-- `toBuffer(): Buffer|ArrayBuffer`
-
-### OSCBundle
-- `constructor([ timetag: number ], [ elements: any[] ])`
-
-##### Class methods
-- `fromObject(obj: object): OSCBundle`
-- `fromBuffer(buffer: Buffer|ArrayBuffer): OSCBundle`
-
-##### Instance attributes
-- `timetag: number`
-- `size: number` _readonly_
-- `oscType: sting` _readonly_
-
-##### Instance methods
-- `add(...elements: any): self`
-- `clear(): self`
-- `clone(): OSCBundle`
-- `toObject(): object`
-- `toBuffer(): Buffer|ArrayBuffer`
+- `oscmsg.decode(buffer: Buffer, opts={}): object`
+  - `opts:strict`: strictly validation mode
+  - `opts:stript`: decode into raw values
+  - aliases: `fromBuffer`, `toObject`
+- `oscmsg.encode(object: object, opts={}): Buffer`
+  - `opts:strict`: strictly validation mode
+  - `opts:integer`: use an integer when auto cast
+  - aliases: `fromObject`, `toBuffer`
 
 ## Examples
 
-#### Build OSCMessage
+decode
 
 ```js
-var msg = new OscMsg.OSCMessage("/foo");
+const dgram = require("dgram");
+const oscmsg = require("osc-msg");
 
-// add float
-msg.add({ type: "float", value: 1 });
-msg.add(2);
+let socket = dgram.createSocket("udp4");
 
-// add integer
-msg.add({ type: "integer", value: 3 });
+socket.on("message", (buffer) => {
+  let message = oscmsg.decode(buffer, { strict: true, strip: true });
 
-// add string
-msg.add({ type: "string", value: "bar" });
-msg.add("baz");
+  if (!message.error) {
+    console.log(JSON.stringify(message, null, 2));
+  }
+});
 
-// convert to object
-msg.toObject();
-→ {
+socket.bind(RECV_PORT);
+```
+
+encode
+
+```js
+const dgram = require("dgram");
+const oscmsg = require("osc-msg");
+
+let message = {
   address: "/foo",
   args: [
-    { type: "float", value: 1 },
-    { type: "float", value: 2 },
-    { type: "integer", value: 3 },
-    { type: "string", value: "bar" },
-    { type: "string", value: "baz" },
+    { type: "integer", value: 0 },
+    { type: "float", value: 1.5 },
   ],
-  oscType: "message",
 };
+let buffer = oscmsg.encode(message);
 
-// convert to buffer
-msg.toBuffer();
-→ Buffer|ArrayBuffer
+let socket = dgram.createSocket("udp4");
+
+socket.send(buffer, 0, buffer.length, SEND_PORT, "127.0.0.1", () => {
+  socket.close();
+});
 ```
 
-#### Build Bundle
+## Javascript representations of the OSC types
+
+_compatible interfaces with [osc-min](https://github.com/russellmcc/node-osc-min)_
+
+- OSC Message
 
 ```js
-var bundle = new OscMsg.OSCBundle(12345);
-
-bundle.add(new OscMsg.OSCMessage("/foo", [ 1, 2, 3 ]));
-
-// convert to object
-bundle.toObject();
-→ {
-  timetag: 12345,
-  elements: [
-    {
-      address: "/foo",
-      args: [
-        { type: "float", value: 1 },
-        { type: "float", value: 2 },
-        { type: "float", value: 3 },
-      ],
-      oscType: "message",
-    },
-  ],
-  oscType: "bundle",
+{
+  "address": string,
+  "args": [ arg1, arg2, ...argN ],
+  "oscType": "message",
 }
-
-// convert to buffer
-bundle.toBuffer();
-→ Buffer|ArrayBuffer
 ```
+
+Where args is an array of OSC Arguments. `oscType` is optional. `args` can be a single element.
+
+- OSC Arguments
+
+```js
+{ "type": string, "value": any }
+```
+
+Where the `type` is one of the following:
+
+  - `string` - string value
+  - `float` - numeric value
+  - `integer` - numeric value
+  - `blob` - Buffer-like value
+  - `true` - value is boolean true
+  - `false` - value is boolean false
+  - `null` - no value
+  - `bang` - no value (this is the `I` type tag)
+  - `timetag` - numeric value
+  - `array` - array of OSC Arguments
+
+- OSC Bundle
+
+```js
+{
+  "timetag": number,
+  "elements": [ element1, element2, ...elementN ],
+  "oscType": "bundle",
+}
+```
+
+Where the timetag is a javascript-native numeric value of the timetag, and elements is an array of either an OSC Bundle or an OSC Message The `oscType` field is optional, but is always returned by api functions.
 
 ## See also
 - [The Open Sound Control 1.0 Specification](http://opensoundcontrol.org/spec-1_0)

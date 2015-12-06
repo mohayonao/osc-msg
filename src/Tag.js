@@ -1,92 +1,113 @@
-import * as util from "./util";
+import * as utils from "./utils";
 
-export let types = {
-  integer: {
+let types = {}, tags = {};
+
+[
+  {
+    type: "integer",
     tag: "i",
     size: () => 4,
-    validate: util.isInteger,
+    validate: utils.isInteger,
+    valueOf: value => +value|0,
     write(writer, value) {
       writer.writeInt32(value);
     },
     read: reader => reader.readInt32(),
   },
-  float: {
+  {
+    type: "float",
     tag: "f",
     size: () => 4,
-    validate: util.isFloat,
+    validate: utils.isFloat,
+    valueOf: value => +value || 0,
     write(writer, value) {
       writer.writeFloat32(value);
     },
     read: reader => reader.readFloat32(),
   },
-  string: {
+  {
+    type: "string",
     tag: "s",
-    size: value => util.size4(value.length + 1),
-    validate: util.isString,
+    size: value => utils.size4(value.length + 1),
+    validate: utils.isString,
+    valueOf: value => "" + value,
     write(writer, value) {
       writer.writeString(value);
     },
     read: reader => reader.readString(),
   },
-  blob: {
+  {
+    type: "blob",
     tag: "b",
-    size: value => 4 + util.size4(value.byteLength || value.length),
-    validate: util.isBlob,
+    size: value => 4 + utils.size4(value.byteLength || value.length),
+    validate: utils.isBlob,
+    valueOf: value => utils.toBlob(value),
     write(writer, value) {
       writer.writeBlob(value);
     },
     read: reader => reader.readBlob(),
   },
-  timetag: {
+  {
+    type: "timetag",
     tag: "t",
     size: () => 8,
-    validate: util.isTimetag,
+    validate: utils.isTimetag,
+    valueOf: value => Math.floor(+value) || 0,
     write(writer, value) {
       writer.writeInt64(value);
     },
     read: reader => reader.readInt64(),
   },
-  double: {
+  {
+    type: "double",
     tag: "d",
     size: () => 8,
-    validate: util.isDouble,
+    validate: utils.isDouble,
+    valueOf: value => +value || 0,
     write(writer, value) {
       writer.writeFloat64(value);
     },
     read: reader => reader.readFloat64(),
   },
-  true: {
+  {
+    type: "true",
     tag: "T",
     size: () => 0,
     validate: value => value === true,
+    valueOf: () => true,
     write: () => {},
     read: () => true,
   },
-  false: {
+  {
+    type: "false",
     tag: "F",
     size: () => 0,
     validate: value => value === false,
+    valueOf: () => false,
     write: () => {},
     read: () => false,
   },
-  null: {
+  {
+    type: "null",
     tag: "N",
     size: () => 0,
     validate: value => value === null,
+    valueOf: () => null,
     write: () => {},
     read: () => null,
   },
-  bang: {
+  {
+    type: "bang",
     tag: "I",
     size: () => 0,
     validate: value => value === "bang",
+    valueOf: () => "bang",
     write: () => {},
     read: () => "bang",
   },
-};
-
-export let tags = {};
-
-Object.keys(types).forEach((key) => {
-  tags[types[key].tag] = key;
+].forEach((params) => {
+  types[params.type] = params;
+  tags[params.tag] = params;
 });
+
+export default { types, tags };
