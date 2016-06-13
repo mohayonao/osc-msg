@@ -1,5 +1,7 @@
-import assert from "power-assert";
-import compile from "../src/compile";
+"use strict";
+
+const assert = require("power-assert");
+const compile = require("../src/compile");
 
 function $i(value) {
   return { type: "integer", value: value };

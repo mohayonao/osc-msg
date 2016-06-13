@@ -1,7 +1,9 @@
-import assert from "power-assert";
-import oscmin from "osc-min";
-import flatten from "lodash.flatten";
-import oscmsg from "../src";
+"use strict";
+
+const assert = require("power-assert");
+const oscmin = require("osc-min");
+const flatten = require("lodash.flatten");
+const oscmsg = require("../src");
 
 function _i(value) {
   return [].slice.call(new Uint8Array(new Int32Array([ value ]).buffer)).reverse();

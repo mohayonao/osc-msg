@@ -1,6 +1,8 @@
-import assert from "power-assert";
-import flatten from "lodash.flatten";
-import encode from "../src/encode";
+"use strict";
+
+const assert = require("power-assert");
+const flatten = require("lodash.flatten");
+const encode = require("../src/encode");
 
 function _i(value) {
   return [].slice.call(new Uint8Array(new Int32Array([ value ]).buffer)).reverse();

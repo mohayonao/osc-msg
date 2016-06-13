@@ -1,8 +1,12 @@
-import Reader from "./Reader";
-import Tag from "./Tag";
-import * as utils from "./utils";
+"use strict";
 
-export default function decode(buffer, opts = {}) {
+const Reader = require("./Reader");
+const Tag = require("./Tag");
+const utils = require("./utils");
+
+function decode(buffer, opts) {
+  opts = opts || {};
+
   if (!utils.isBlob(buffer)) {
     return { error: new TypeError("invalid Buffer for OSCMessage") };
   }
@@ -126,3 +130,5 @@ function decodeMessage(buffer, opts) {
 
   return msg;
 }
+
+module.exports = decode;

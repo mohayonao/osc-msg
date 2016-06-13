@@ -1,7 +1,9 @@
+"use strict";
+
 /* eslint-disable no-inline-comments */
 
-import assert from "power-assert";
-import Writer from "../src/Writer";
+const assert = require("power-assert");
+const Writer = require("../src/Writer");
 
 describe("Writer", () => {
   describe("constructor(buffer: Buffer|ArrayBuffer)", () => {

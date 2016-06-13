@@ -1,4 +1,7 @@
-import { DataView2, Buffer2 } from "dataview2";
+"use strict";
+
+const DataView2 = require("dataview2").DataView2;
+const Buffer2 = require("dataview2").Buffer2;
 
 function size4(num) {
   return Math.ceil((num|0) / 4) << 2;
@@ -81,6 +84,6 @@ function toBlob(value) {
   return new Buffer2(0);
 }
 
-export default {
+module.exports = {
   size4, isNone, isInteger, isFloat, isDouble, isTimetag, isString, isBlob, toString, toArray, toBlob,
 };

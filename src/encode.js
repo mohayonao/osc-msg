@@ -1,9 +1,12 @@
-import { Buffer2 } from "dataview2";
-import compile from "./compile";
-import Writer from "./Writer";
-import Tag from "./Tag";
+"use strict";
 
-export default function encode(object, opts = {}) {
+const Buffer2 = require("dataview2").Buffer2;
+const compile = require("./compile");
+const Writer = require("./Writer");
+const Tag = require("./Tag");
+
+function encode(object, opts) {
+  opts = opts || {};
   object = compile(object, opts);
 
   let bufferLength = object.bufferLength;
@@ -42,7 +45,9 @@ function encodeMessage(writer, object) {
   writer.writeString(object.address);
   writer.writeString("," + object.types);
 
-  object.values.forEach(({ type, value }) => {
-    Tag.types[type].write(writer, value);
+  object.values.forEach((items) => {
+    Tag.types[items.type].write(writer, items.value);
   });
 }
+
+module.exports = encode;

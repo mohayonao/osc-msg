@@ -1,7 +1,10 @@
-import assert from "power-assert";
-import Writer from "../src/Writer";
-import Reader from "../src/Reader";
-import { types, tags } from "../src/Tag";
+"use strict";
+
+const assert = require("power-assert");
+const Writer = require("../src/Writer");
+const Reader = require("../src/Reader");
+const types = require("../src/Tag").types;
+const tags = require("../src/Tag").tags;
 
 describe("Tag", () => {
   let writer, reader;

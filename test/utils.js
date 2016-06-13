@@ -1,5 +1,7 @@
-import assert from "power-assert";
-import * as utils from "../src/utils";
+"use strict";
+
+const assert = require("power-assert");
+const utils = require("../src/utils");
 
 let UNDEFINED;
 

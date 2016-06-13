@@ -1,8 +1,11 @@
-import { DataView2, Buffer2 } from "dataview2";
+"use strict";
+
+const DataView2 = require("dataview2").DataView2;
+const Buffer2 = require("dataview2").Buffer2;
 
 const TWO_TO_THE_32 = Math.pow(2, 32);
 
-export default class Reader {
+class Reader {
   constructor(buffer) {
     this.view = new DataView2(buffer);
 
@@ -136,3 +139,5 @@ export default class Reader {
     }
   }
 }
+
+module.exports = Reader;

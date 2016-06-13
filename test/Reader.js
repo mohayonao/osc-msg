@@ -1,7 +1,9 @@
+"use strict";
+
 /* eslint-disable no-inline-comments */
 
-import assert from "power-assert";
-import Reader from "../src/Reader";
+const assert = require("power-assert");
+const Reader = require("../src/Reader");
 
 describe("Reader", () => {
   describe("constructor(buffer: Buffer|ArrayBuffer)", () => {

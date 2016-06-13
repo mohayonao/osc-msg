@@ -1,4 +1,6 @@
-import * as utils from "./utils";
+"use strict";
+
+const utils = require("./utils");
 
 let types = {}, tags = {};
 
@@ -110,4 +112,4 @@ let types = {}, tags = {};
   tags[params.tag] = params;
 });
 
-export default { types, tags };
+module.exports = { types, tags };

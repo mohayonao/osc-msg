@@ -1,7 +1,9 @@
-import assert from "power-assert";
-import index from "../src";
-import decode from "../src/decode";
-import encode from "../src/encode";
+"use strict";
+
+const assert = require("power-assert");
+const index = require("../src");
+const decode = require("../src/decode");
+const encode = require("../src/encode");
 
 describe("index", () => {
   it("exports", () => {

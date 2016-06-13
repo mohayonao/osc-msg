@@ -1,7 +1,9 @@
-import Tag from "./Tag";
-import * as utils from "./utils";
+"use strict";
 
-export default function compile(object, opts) {
+const Tag = require("./Tag");
+const utils = require("./utils");
+
+function compile(object, opts) {
   if (object === null || typeof object !== "object" || Array.isArray(object)) {
     object = { args: [ object ] };
   }
@@ -43,7 +45,11 @@ function compileMessage(object, opts) {
 
   let address = utils.toString(object.address);
   let args = utils.toArray(object.args).map(value => convertTypedValue(value, opts));
-  let { types, values, bufferLength, error } = build(args, opts);
+  let items = build(args, opts);
+  let types = items.types;
+  let values = items.values;
+  let bufferLength = items.bufferLength;
+  let error = items.error;
   let oscType = "message";
 
   bufferLength += utils.size4(address.length + 1);
@@ -102,7 +108,7 @@ function build(args, opts) {
     } else if (value.type === "array") {
       let item = build(value.value, opts);
 
-      values.push(...item.values);
+      values.push.apply(values, item.values);
       types += `[${item.types}]`;
       bufferLength += item.bufferLength;
       error = error || item.error;
@@ -117,3 +123,5 @@ function build(args, opts) {
 
   return { types, values, bufferLength, error };
 }
+
+module.exports = compile;

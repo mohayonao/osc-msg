@@ -1,8 +1,10 @@
-import { DataView2 } from "dataview2";
+"use strict";
+
+const DataView2 = require("dataview2").DataView2;
 
 const TWO_TO_THE_32 = Math.pow(2, 32);
 
-export default class Writer {
+class Writer {
   constructor(buffer) {
     this.view = new DataView2(buffer);
 
@@ -104,3 +106,5 @@ export default class Writer {
     }
   }
 }
+
+module.exports = Writer;
