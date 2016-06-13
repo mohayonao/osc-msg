@@ -17,8 +17,8 @@ class Reader {
     length >>>= 0;
 
     if (this._index + length <= this.view.byteLength) {
-      let buffer = new Buffer2(length);
-      let view = new DataView2(buffer);
+      const buffer = new Buffer2(length);
+      const view = new DataView2(buffer);
 
       for (let i = 0; i < length; i++) {
         view.setUint8(i, this.readUInt8());
@@ -70,8 +70,8 @@ class Reader {
   }
 
   readInt64() {
-    let hi = this.readUInt32();
-    let lo = this.readUInt32();
+    const hi = this.readUInt32();
+    const lo = this.readUInt32();
 
     return hi * TWO_TO_THE_32 + lo;
   }
@@ -117,8 +117,8 @@ class Reader {
   }
 
   readBlob() {
-    let length = this.readUInt32();
-    let buffer = this.read(length);
+    const length = this.readUInt32();
+    const buffer = this.read(length);
 
     this._align();
 

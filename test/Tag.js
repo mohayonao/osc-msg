@@ -10,7 +10,7 @@ describe("Tag", () => {
   let writer, reader;
 
   beforeEach(() => {
-    let buffer = new Buffer(16);
+    const buffer = new Buffer(16);
 
     writer = new Writer(buffer);
     reader = new Reader(buffer);
@@ -95,7 +95,7 @@ describe("Tag", () => {
   });
   describe('["timetag"]', () => {
     it("works", () => {
-      let now = Date.now();
+      const now = Date.now();
 
       assert(types["timetag"].tag === "t");
       assert(types["timetag"].size() === 8);

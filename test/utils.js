@@ -3,8 +3,6 @@
 const assert = require("power-assert");
 const utils = require("../src/utils");
 
-let UNDEFINED;
-
 describe("utils", () => {
   describe(".size4(num: number): number", () => {
     it("works", () => {
@@ -30,7 +28,7 @@ describe("utils", () => {
       assert(utils.isNone(true) === false);
       assert(utils.isNone(false) === false);
       assert(utils.isNone(null) === true);
-      assert(utils.isNone(UNDEFINED) === true);
+      assert(utils.isNone(undefined) === true);
       assert(utils.isNone("0") === false);
       assert(utils.isNone(new Buffer(0)) === false);
       assert(utils.isNone(new Uint8Array(0).buffer) === false);
@@ -47,7 +45,7 @@ describe("utils", () => {
       assert(utils.isInteger(true) === false);
       assert(utils.isInteger(false) === false);
       assert(utils.isInteger(null) === false);
-      assert(utils.isInteger(UNDEFINED) === false);
+      assert(utils.isInteger(undefined) === false);
       assert(utils.isInteger("0") === false);
       assert(utils.isInteger(new Buffer(0)) === false);
       assert(utils.isInteger(new Uint8Array(0).buffer) === false);
@@ -65,7 +63,7 @@ describe("utils", () => {
       assert(utils.isFloat(false) === false);
       assert(utils.isFloat(null) === false);
       assert(utils.isFloat("0") === false);
-      assert(utils.isFloat(UNDEFINED) === false);
+      assert(utils.isFloat(undefined) === false);
       assert(utils.isFloat(new Buffer(0)) === false);
       assert(utils.isFloat(new Uint8Array(0).buffer) === false);
     });
@@ -82,7 +80,7 @@ describe("utils", () => {
       assert(utils.isDouble(false) === false);
       assert(utils.isDouble(null) === false);
       assert(utils.isDouble("0") === false);
-      assert(utils.isDouble(UNDEFINED) === false);
+      assert(utils.isDouble(undefined) === false);
       assert(utils.isDouble(new Buffer(0)) === false);
       assert(utils.isDouble(new Uint8Array(0).buffer) === false);
     });
@@ -99,7 +97,7 @@ describe("utils", () => {
       assert(utils.isTimetag(false) === false);
       assert(utils.isTimetag(null) === false);
       assert(utils.isTimetag("0") === false);
-      assert(utils.isTimetag(UNDEFINED) === false);
+      assert(utils.isTimetag(undefined) === false);
       assert(utils.isTimetag(new Buffer(0)) === false);
       assert(utils.isTimetag(new Uint8Array(0).buffer) === false);
     });
@@ -116,7 +114,7 @@ describe("utils", () => {
       assert(utils.isString(false) === false);
       assert(utils.isString(null) === false);
       assert(utils.isString("0") === true);
-      assert(utils.isString(UNDEFINED) === false);
+      assert(utils.isString(undefined) === false);
       assert(utils.isString(new Buffer(0)) === false);
       assert(utils.isString(new Uint8Array(0).buffer) === false);
     });
@@ -132,7 +130,7 @@ describe("utils", () => {
       assert(utils.isBlob(true) === false);
       assert(utils.isBlob(false) === false);
       assert(utils.isBlob(null) === false);
-      assert(utils.isBlob(UNDEFINED) === false);
+      assert(utils.isBlob(undefined) === false);
       assert(utils.isBlob("0") === false);
       assert(utils.isBlob(new Buffer(0)) === true);
       assert(utils.isBlob(new Uint8Array(0).buffer) === true);
@@ -141,7 +139,7 @@ describe("utils", () => {
   describe(".toString(value: any): string", () => {
     it("works", () => {
       assert(utils.toString(null) === "");
-      assert(utils.toString(UNDEFINED) === "");
+      assert(utils.toString(undefined) === "");
       assert(utils.toString(100) === "100");
       assert(utils.toString("0") === "0");
     });
@@ -149,14 +147,14 @@ describe("utils", () => {
   describe(".toArray(value: any): any[]", () => {
     it("works", () => {
       assert.deepEqual(utils.toArray(null), []);
-      assert.deepEqual(utils.toArray(UNDEFINED), []);
+      assert.deepEqual(utils.toArray(undefined), []);
       assert.deepEqual(utils.toArray(100), [ 100 ]);
       assert.deepEqual(utils.toArray([ 100, 200, 300 ]), [ 100, 200, 300 ]);
     });
   });
   describe(".toBlob(value: any): Buffer", () => {
     it("works", () => {
-      let blob = new Buffer([ 0x62, 0x6c, 0x6f, 0x62 ]);
+      const blob = new Buffer([ 0x62, 0x6c, 0x6f, 0x62 ]);
 
       assert(utils.toBlob(blob) === blob);
       assert(utils.toBlob([ 0x62, 0x6c, 0x6f, 0x62 ]) instanceof Buffer);

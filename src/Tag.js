@@ -2,7 +2,8 @@
 
 const utils = require("./utils");
 
-let types = {}, tags = {};
+const types = {};
+const tags = {};
 
 [
   {
@@ -14,7 +15,7 @@ let types = {}, tags = {};
     write(writer, value) {
       writer.writeInt32(value);
     },
-    read: reader => reader.readInt32(),
+    read: reader => reader.readInt32()
   },
   {
     type: "float",
@@ -25,7 +26,7 @@ let types = {}, tags = {};
     write(writer, value) {
       writer.writeFloat32(value);
     },
-    read: reader => reader.readFloat32(),
+    read: reader => reader.readFloat32()
   },
   {
     type: "string",
@@ -36,7 +37,7 @@ let types = {}, tags = {};
     write(writer, value) {
       writer.writeString(value);
     },
-    read: reader => reader.readString(),
+    read: reader => reader.readString()
   },
   {
     type: "blob",
@@ -47,7 +48,7 @@ let types = {}, tags = {};
     write(writer, value) {
       writer.writeBlob(value);
     },
-    read: reader => reader.readBlob(),
+    read: reader => reader.readBlob()
   },
   {
     type: "timetag",
@@ -58,7 +59,7 @@ let types = {}, tags = {};
     write(writer, value) {
       writer.writeInt64(value);
     },
-    read: reader => reader.readInt64(),
+    read: reader => reader.readInt64()
   },
   {
     type: "double",
@@ -69,7 +70,7 @@ let types = {}, tags = {};
     write(writer, value) {
       writer.writeFloat64(value);
     },
-    read: reader => reader.readFloat64(),
+    read: reader => reader.readFloat64()
   },
   {
     type: "true",
@@ -78,7 +79,7 @@ let types = {}, tags = {};
     validate: value => value === true,
     valueOf: () => true,
     write: () => {},
-    read: () => true,
+    read: () => true
   },
   {
     type: "false",
@@ -87,7 +88,7 @@ let types = {}, tags = {};
     validate: value => value === false,
     valueOf: () => false,
     write: () => {},
-    read: () => false,
+    read: () => false
   },
   {
     type: "null",
@@ -96,7 +97,7 @@ let types = {}, tags = {};
     validate: value => value === null,
     valueOf: () => null,
     write: () => {},
-    read: () => null,
+    read: () => null
   },
   {
     type: "bang",
@@ -105,8 +106,8 @@ let types = {}, tags = {};
     validate: value => value === "bang",
     valueOf: () => "bang",
     write: () => {},
-    read: () => "bang",
-  },
+    read: () => "bang"
+  }
 ].forEach((params) => {
   types[params.type] = params;
   tags[params.tag] = params;

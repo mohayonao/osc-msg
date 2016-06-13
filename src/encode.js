@@ -9,9 +9,9 @@ function encode(object, opts) {
   opts = opts || {};
   object = compile(object, opts);
 
-  let bufferLength = object.bufferLength;
-  let buffer = new Buffer2(bufferLength);
-  let writer = new Writer(buffer);
+  const bufferLength = object.bufferLength;
+  const buffer = new Buffer2(bufferLength);
+  const writer = new Writer(buffer);
 
   if (object.oscType === "bundle") {
     encodeBundle(writer, object);

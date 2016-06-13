@@ -11,7 +11,7 @@ function decode(buffer, opts) {
     return { error: new TypeError("invalid Buffer for OSCMessage") };
   }
 
-  let reader = new Reader(buffer);
+  const reader = new Reader(buffer);
 
   if (reader.readString() === "#bundle") {
     return decodeBundle(buffer, opts);
@@ -21,20 +21,21 @@ function decode(buffer, opts) {
 }
 
 function decodeBundle(buffer, opts) {
-  let reader = new Reader(buffer);
+  const reader = new Reader(buffer);
 
   // read '#bundle'
   reader.readString();
 
-  let timetag = reader.readInt64();
-  let elements = [];
-  let oscType = "bundle";
+  const timetag = reader.readInt64();
+  const elements = [];
+  const oscType = "bundle";
+
   let error = null;
 
   while (reader.hasNext()) {
-    let length = reader.readUInt32();
-    let buffer = reader.read(length);
-    let msg = decode(buffer, opts);
+    const length = reader.readUInt32();
+    const buffer = reader.read(length);
+    const msg = decode(buffer, opts);
 
     if (msg.error) {
       error = msg.error;
@@ -51,7 +52,7 @@ function decodeBundle(buffer, opts) {
     }
   }
 
-  let bundle = { timetag, elements, oscType };
+  const bundle = { timetag, elements, oscType };
 
   if (error) {
     bundle.error = error;
@@ -61,18 +62,19 @@ function decodeBundle(buffer, opts) {
 }
 
 function decodeMessage(buffer, opts) {
-  let reader = new Reader(buffer);
-  let address = reader.readString();
-  let tags = reader.readString();
+  const reader = new Reader(buffer);
+  const address = reader.readString();
+  const tags = reader.readString();
+  const oscType = "message";
+
   let args = [];
-  let oscType = "message";
   let error = null;
 
   if (tags[0] === ",") {
-    let stack = [];
+    const stack = [];
 
     for (let i = 1; i < tags.length; i++) {
-      let tag = tags[i];
+      const tag = tags[i];
 
       switch (tag) {
       case "[":
@@ -81,7 +83,7 @@ function decodeMessage(buffer, opts) {
         break;
       case "]":
         if (stack.length !== 0) {
-          let pop = stack.pop();
+          const pop = stack.pop();
 
           if (opts.strip) {
             pop.push(args);
@@ -122,7 +124,7 @@ function decodeMessage(buffer, opts) {
     error = new TypeError("Missing OSC Type Tag String");
   }
 
-  let msg = { address, args, oscType };
+  const msg = { address, args, oscType };
 
   if (error) {
     msg.error = error;

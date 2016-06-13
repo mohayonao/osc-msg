@@ -58,7 +58,7 @@ function toBlob(value) {
   }
 
   if (Array.isArray(value)) {
-    let view = new DataView2(new Buffer2(value.length));
+    const view = new DataView2(new Buffer2(value.length));
 
     for (let i = 0; i < value.length; i++) {
       view.setUint8(i, value[i]);
@@ -68,7 +68,7 @@ function toBlob(value) {
   }
 
   if (typeof value === "string") {
-    let view = new DataView2(new Buffer2(value.length));
+    const view = new DataView2(new Buffer2(value.length));
 
     for (let i = 0; i < value.length; i++) {
       view.setUint8(i, value.charCodeAt(i));
@@ -85,5 +85,5 @@ function toBlob(value) {
 }
 
 module.exports = {
-  size4, isNone, isInteger, isFloat, isDouble, isTimetag, isString, isBlob, toString, toArray, toBlob,
+  size4, isNone, isInteger, isFloat, isDouble, isTimetag, isString, isBlob, toString, toArray, toBlob
 };

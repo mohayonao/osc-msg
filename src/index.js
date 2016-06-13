@@ -9,5 +9,5 @@ module.exports = {
   fromBuffer: decode,
   fromObject: encode,
   toBuffer: encode,
-  toObject: decode,
+  toObject: decode
 };
