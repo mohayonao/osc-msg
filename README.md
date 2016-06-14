@@ -20,12 +20,13 @@ npm install osc-msg
 ## API
 
 - `oscmsg.decode(buffer: Buffer, opts={}): object`
-  - `opts:strict`: strictly validation mode
-  - `opts:stript`: decode into raw values
+  - `opts.strict`: strictly validation mode
+  - `opts.strip`: decode into raw values
+  - `opts.bundle`: decode as bundle
   - aliases: `fromBuffer`, `toObject`
 - `oscmsg.encode(object: object, opts={}): Buffer`
-  - `opts:strict`: strictly validation mode
-  - `opts:integer`: use an integer when auto cast
+  - `opts.strict`: strictly validation mode
+  - `opts.integer`: use an integer when auto cast
   - aliases: `fromObject`, `toBuffer`
 
 ## Examples
