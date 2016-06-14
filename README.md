@@ -6,8 +6,9 @@
 > OSC message decoder/encoder with fault tolerant
 
 ## Features
+- Not throw an exception if processing with a broken message
+- Useful decoding options, `bundle` and `strip`
 - Works in both Node.js and browsers
-- Not throw an exception if processing with broken messages
 
 ## Installation
 
@@ -22,7 +23,7 @@ npm install osc-msg
 - `oscmsg.decode(buffer: Buffer, opts={}): object`
   - `opts.strict`: strictly validation mode
   - `opts.strip`: decode into raw values
-  - `opts.bundle`: decode as bundle
+  - `opts.bundle`: decode as a bundle
   - aliases: `fromBuffer`, `toObject`
 - `oscmsg.encode(object: object, opts={}): Buffer`
   - `opts.strict`: strictly validation mode
@@ -37,14 +38,18 @@ decode
 const dgram = require("dgram");
 const oscmsg = require("osc-msg");
 
-let socket = dgram.createSocket("udp4");
+const socket = dgram.createSocket("udp4");
 
 socket.on("message", (buffer) => {
-  let message = oscmsg.decode(buffer, { strict: true, strip: true });
+  const bundle = oscmsg.decode(buffer, { strict: true, strip: true, bundle: true });
 
-  if (!message.error) {
-    console.log(JSON.stringify(message, null, 2));
+  if (bundle.error) {
+    return;
   }
+
+  bundle.elements.forEach((message) => {
+    console.log(JSON.stringify(message));    
+  });
 });
 
 socket.bind(RECV_PORT);
@@ -56,20 +61,17 @@ encode
 const dgram = require("dgram");
 const oscmsg = require("osc-msg");
 
-let message = {
+const message = {
   address: "/foo",
   args: [
     { type: "integer", value: 0 },
-    { type: "float", value: 1.5 },
-  ],
+    { type: "float", value: 1.5 }
+  ]
 };
-let buffer = oscmsg.encode(message);
+const buffer = oscmsg.encode(message);
+const socket = dgram.createSocket("udp4");
 
-let socket = dgram.createSocket("udp4");
-
-socket.send(buffer, 0, buffer.length, SEND_PORT, "127.0.0.1", () => {
-  socket.close();
-});
+socket.send(buffer, 0, buffer.length, SEND_PORT, "127.0.0.1");
 ```
 
 ## Javascript representations of the OSC types
@@ -82,7 +84,7 @@ _compatible interfaces with [osc-min](https://github.com/russellmcc/node-osc-min
 {
   "address": string,
   "args": [ arg1, arg2, ...argN ],
-  "oscType": "message",
+  "oscType": "message"
 }
 ```
 
@@ -113,7 +115,7 @@ Where the `type` is one of the following:
 {
   "timetag": number,
   "elements": [ element1, element2, ...elementN ],
-  "oscType": "bundle",
+  "oscType": "bundle"
 }
 ```
 
