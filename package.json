@@ -1,7 +1,7 @@
 {
   "name": "osc-msg",
   "description": "OSC message decoder/encoder with fault tolerant",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "author": "Nao Yonamine <mohayonao@gmail.com>",
   "bugs": {
     "url": "https://github.com/mohayonao/osc-msg/issues"
