@@ -1,13 +1,16 @@
-import assert from "power-assert";
-import Writer from "../src/Writer";
-import Reader from "../src/Reader";
-import { types, tags } from "../src/Tag";
+"use strict";
+
+const assert = require("power-assert");
+const Writer = require("../src/Writer");
+const Reader = require("../src/Reader");
+const types = require("../src/Tag").types;
+const tags = require("../src/Tag").tags;
 
 describe("Tag", () => {
   let writer, reader;
 
   beforeEach(() => {
-    let buffer = new Buffer(16);
+    const buffer = new Buffer(16);
 
     writer = new Writer(buffer);
     reader = new Reader(buffer);
@@ -92,7 +95,7 @@ describe("Tag", () => {
   });
   describe('["timetag"]', () => {
     it("works", () => {
-      let now = Date.now();
+      const now = Date.now();
 
       assert(types["timetag"].tag === "t");
       assert(types["timetag"].size() === 8);

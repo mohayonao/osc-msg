@@ -1,8 +1,10 @@
-import { DataView2 } from "dataview2";
+"use strict";
+
+const DataView2 = require("dataview2").DataView2;
 
 const TWO_TO_THE_32 = Math.pow(2, 32);
 
-export default class Writer {
+class Writer {
   constructor(buffer) {
     this.view = new DataView2(buffer);
 
@@ -41,8 +43,8 @@ export default class Writer {
   }
 
   writeInt64(value) {
-    let hi = (value / TWO_TO_THE_32) >>> 0;
-    let lo = value >>> 0;
+    const hi = (value / TWO_TO_THE_32) >>> 0;
+    const lo = value >>> 0;
 
     this.writeUInt32(hi);
     this.writeUInt32(lo);
@@ -78,8 +80,8 @@ export default class Writer {
   }
 
   writeBlob(value) {
-    let view = new DataView2(value);
-    let length = view.byteLength;
+    const view = new DataView2(value);
+    const length = view.byteLength;
 
     this.writeUInt32(length);
 
@@ -104,3 +106,5 @@ export default class Writer {
     }
   }
 }
+
+module.exports = Writer;

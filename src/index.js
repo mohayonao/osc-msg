@@ -1,11 +1,13 @@
-import decode from "./decode";
-import encode from "./encode";
+"use strict";
 
-export default {
+const decode = require("./decode");
+const encode = require("./encode");
+
+module.exports = {
   decode,
   encode,
   fromBuffer: decode,
   fromObject: encode,
   toBuffer: encode,
-  toObject: decode,
+  toObject: decode
 };

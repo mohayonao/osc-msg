@@ -1,4 +1,7 @@
-import { DataView2, Buffer2 } from "dataview2";
+"use strict";
+
+const DataView2 = require("dataview2").DataView2;
+const Buffer2 = require("dataview2").Buffer2;
 
 function size4(num) {
   return Math.ceil((num|0) / 4) << 2;
@@ -55,7 +58,7 @@ function toBlob(value) {
   }
 
   if (Array.isArray(value)) {
-    let view = new DataView2(new Buffer2(value.length));
+    const view = new DataView2(new Buffer2(value.length));
 
     for (let i = 0; i < value.length; i++) {
       view.setUint8(i, value[i]);
@@ -65,7 +68,7 @@ function toBlob(value) {
   }
 
   if (typeof value === "string") {
-    let view = new DataView2(new Buffer2(value.length));
+    const view = new DataView2(new Buffer2(value.length));
 
     for (let i = 0; i < value.length; i++) {
       view.setUint8(i, value.charCodeAt(i));
@@ -81,6 +84,6 @@ function toBlob(value) {
   return new Buffer2(0);
 }
 
-export default {
-  size4, isNone, isInteger, isFloat, isDouble, isTimetag, isString, isBlob, toString, toArray, toBlob,
+module.exports = {
+  size4, isNone, isInteger, isFloat, isDouble, isTimetag, isString, isBlob, toString, toArray, toBlob
 };

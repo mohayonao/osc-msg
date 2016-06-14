@@ -1,8 +1,11 @@
-import { DataView2, Buffer2 } from "dataview2";
+"use strict";
+
+const DataView2 = require("dataview2").DataView2;
+const Buffer2 = require("dataview2").Buffer2;
 
 const TWO_TO_THE_32 = Math.pow(2, 32);
 
-export default class Reader {
+class Reader {
   constructor(buffer) {
     this.view = new DataView2(buffer);
 
@@ -14,8 +17,8 @@ export default class Reader {
     length >>>= 0;
 
     if (this._index + length <= this.view.byteLength) {
-      let buffer = new Buffer2(length);
-      let view = new DataView2(buffer);
+      const buffer = new Buffer2(length);
+      const view = new DataView2(buffer);
 
       for (let i = 0; i < length; i++) {
         view.setUint8(i, this.readUInt8());
@@ -67,8 +70,8 @@ export default class Reader {
   }
 
   readInt64() {
-    let hi = this.readUInt32();
-    let lo = this.readUInt32();
+    const hi = this.readUInt32();
+    const lo = this.readUInt32();
 
     return hi * TWO_TO_THE_32 + lo;
   }
@@ -114,8 +117,8 @@ export default class Reader {
   }
 
   readBlob() {
-    let length = this.readUInt32();
-    let buffer = this.read(length);
+    const length = this.readUInt32();
+    const buffer = this.read(length);
 
     this._align();
 
@@ -136,3 +139,5 @@ export default class Reader {
     }
   }
 }
+
+module.exports = Reader;

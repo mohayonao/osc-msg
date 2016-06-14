@@ -1,21 +1,21 @@
-/* eslint-disable no-inline-comments */
+"use strict";
 
-import assert from "power-assert";
-import Writer from "../src/Writer";
+const assert = require("power-assert");
+const Writer = require("../src/Writer");
 
 describe("Writer", () => {
   describe("constructor(buffer: Buffer|ArrayBuffer)", () => {
     it("works", () => {
-      let buffer = new Uint8Array(8).buffer;
-      let writer = new Writer(buffer);
+      const buffer = new Uint8Array(8).buffer;
+      const writer = new Writer(buffer);
 
       assert(writer instanceof Writer);
     });
   });
   describe("#writeUInt8(value: number): void", () => {
     it("works", () => {
-      let buffer = new Uint8Array(8).buffer;
-      let writer = new Writer(buffer);
+      const buffer = new Uint8Array(8).buffer;
+      const writer = new Writer(buffer);
 
       writer.writeUInt8(0x00);
       writer.writeUInt8(0x00);
@@ -41,8 +41,8 @@ describe("Writer", () => {
   });
   describe("#writeInt32(value: number): void", () => {
     it("works", () => {
-      let buffer = new Uint8Array(8).buffer;
-      let writer = new Writer(buffer);
+      const buffer = new Uint8Array(8).buffer;
+      const writer = new Writer(buffer);
 
       writer.writeInt32(1000);
       writer.writeInt32(-1); // EOD
@@ -56,8 +56,8 @@ describe("Writer", () => {
   });
   describe("#writeUInt32(value: number): void", () => {
     it("works", () => {
-      let buffer = new Uint8Array(8).buffer;
-      let writer = new Writer(buffer);
+      const buffer = new Uint8Array(8).buffer;
+      const writer = new Writer(buffer);
 
       writer.writeUInt32(1000);
       writer.writeUInt32(4294967295); // EOD
@@ -71,8 +71,8 @@ describe("Writer", () => {
   });
   describe("#writeFloat32(value: number): void", () => {
     it("works", () => {
-      let buffer = new Uint8Array(8).buffer;
-      let writer = new Writer(buffer);
+      const buffer = new Uint8Array(8).buffer;
+      const writer = new Writer(buffer);
 
       writer.writeFloat32(1.234);
       writer.writeFloat32(5.678); // EOD
@@ -86,8 +86,8 @@ describe("Writer", () => {
   });
   describe("#writeFloat64(value: number): void", () => {
     it("works", () => {
-      let buffer = new Uint8Array(16).buffer;
-      let writer = new Writer(buffer);
+      const buffer = new Uint8Array(16).buffer;
+      const writer = new Writer(buffer);
 
       writer.writeFloat64(1.2345678);
       writer.writeFloat64(9.0123456); // EOD
@@ -101,8 +101,8 @@ describe("Writer", () => {
   });
   describe("#writeString(value: string): void", () => {
     it("works", () => {
-      let buffer = new Uint8Array(16).buffer;
-      let writer = new Writer(buffer);
+      const buffer = new Uint8Array(16).buffer;
+      const writer = new Writer(buffer);
 
       writer.writeString("/foo");
       writer.writeString(",iisff");
@@ -131,8 +131,8 @@ describe("Writer", () => {
   });
   describe("#writeBlob(value: Buffer|ArrayBuffer): void", () => {
     it("works", () => {
-      let buffer = new Uint8Array(32).buffer;
-      let writer = new Writer(buffer);
+      const buffer = new Uint8Array(32).buffer;
+      const writer = new Writer(buffer);
 
       writer.writeBlob(new Buffer([ 0x01, 0x02, 0x03, 0x04, 0x05, 0x06 ]));
       writer.writeBlob(new Buffer([ 0x07, 0x08, 0x09, 0x00 ])); // EOD
@@ -159,8 +159,8 @@ describe("Writer", () => {
   });
   describe("#hasNext(): boolean", () => {
     it("works", () => {
-      let buffer = new Uint8Array(4).buffer;
-      let writer = new Writer(buffer);
+      const buffer = new Uint8Array(4).buffer;
+      const writer = new Writer(buffer);
 
       assert(writer.hasError() === false);
 
@@ -173,8 +173,8 @@ describe("Writer", () => {
   });
   describe("#hasNext(): boolean", () => {
     it("works", () => {
-      let buffer = new Uint8Array(8).buffer;
-      let writer = new Writer(buffer);
+      const buffer = new Uint8Array(8).buffer;
+      const writer = new Writer(buffer);
 
       assert(writer.hasNext() === true);
 

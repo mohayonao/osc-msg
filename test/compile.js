@@ -1,5 +1,7 @@
-import assert from "power-assert";
-import compile from "../src/compile";
+"use strict";
+
+const assert = require("power-assert");
+const compile = require("../src/compile");
 
 function $i(value) {
   return { type: "integer", value: value };
@@ -27,8 +29,8 @@ function $N() {
 
 describe("compile(object: object, opts: object): object", () => {
   it("0", () => {
-    let data = 0;
-    let result = compile(data, {});
+    const data = 0;
+    const result = compile(data, {});
 
     assert.deepEqual(result, {
       address: "",
@@ -36,12 +38,12 @@ describe("compile(object: object, opts: object): object", () => {
       values: [ $f(0) ],
       bufferLength: 12,
       oscType: "message",
-      error: null,
+      error: null
     });
   });
   it("[ 1, 2, 3 ]", () => {
-    let data = [ $i(1), $i(2), $i(3) ];
-    let result = compile(data, {});
+    const data = [ $i(1), $i(2), $i(3) ];
+    const result = compile(data, {});
 
     assert.deepEqual(result, {
       address: "",
@@ -49,15 +51,15 @@ describe("compile(object: object, opts: object): object", () => {
       values: [ $i(1), $i(2), $i(3) ],
       bufferLength: 24,
       oscType: "message",
-      error: null,
+      error: null
     });
   });
   it("/matrix [ [ 1, 0, 0 ], [ 0, 1, 0 ], [ 0, 0, 1 ] ]", () => {
-    let data = {
+    const data = {
       address: "/matrix",
-      args: [ [ [ 1, 0, 0 ], [ 0, 1, 0 ], [ 0, 0, 1 ] ] ],
+      args: [ [ [ 1, 0, 0 ], [ 0, 1, 0 ], [ 0, 0, 1 ] ] ]
     };
-    let result = compile(data, {});
+    const result = compile(data, {});
 
     assert.deepEqual(result, {
       address: "/matrix",
@@ -65,25 +67,25 @@ describe("compile(object: object, opts: object): object", () => {
       values: [ $f(1), $f(0), $f(0), $f(0), $f(1), $f(0), $f(0), $f(0), $f(1) ],
       bufferLength: 64,
       oscType: "message",
-      error: null,
+      error: null
     });
   });
   it("/complex", () => {
-    let now = Date.now();
-    let data = {
+    const now = Date.now();
+    const data = {
       elements: [
         {
           timetag: now,
           elements: [
             {
               address: "/complex",
-              args: [ true, false, null, "xxx" ],
-            },
-          ],
-        },
-      ],
+              args: [ true, false, null, "xxx" ]
+            }
+          ]
+        }
+      ]
     };
-    let result = compile(data, {});
+    const result = compile(data, {});
 
     assert.deepEqual(result, {
       timetag: 0,
@@ -97,25 +99,25 @@ describe("compile(object: object, opts: object): object", () => {
               values: [ $T(), $F(), $N(), $s("xxx") ],
               bufferLength: 24,
               oscType: "message",
-              error: null,
-            },
+              error: null
+            }
           ],
           bufferLength: 44,
           oscType: "bundle",
-          error: null,
-        },
+          error: null
+        }
       ],
       bufferLength: 64,
       oscType: "bundle",
-      error: null,
+      error: null
     });
   });
   it("with integer option", () => {
-    let data = {
+    const data = {
       address: "/matrix",
-      args: [ [ [ 1, 0, 0 ], [ 0, 1, 0 ], [ 0, 0, 1 ] ] ],
+      args: [ [ [ 1, 0, 0 ], [ 0, 1, 0 ], [ 0, 0, 1 ] ] ]
     };
-    let result = compile(data, { integer: true });
+    const result = compile(data, { integer: true });
 
     assert.deepEqual(result, {
       address: "/matrix",
@@ -123,38 +125,38 @@ describe("compile(object: object, opts: object): object", () => {
       values: [ $i(1), $i(0), $i(0), $i(0), $i(1), $i(0), $i(0), $i(0), $i(1) ],
       bufferLength: 64,
       oscType: "message",
-      error: null,
+      error: null
     });
   });
   it("with strict option", () => {
-    let data = {};
-    let result = compile(data, { strict: true });
+    const data = {};
+    const result = compile(data, { strict: true });
 
     assert(result.error instanceof Error);
   });
   it("with strict option", () => {
-    let data = {
+    const data = {
       address: "/strict",
       args: [
-        { type: "integer", value: NaN },
-      ],
+        { type: "integer", value: NaN }
+      ]
     };
-    let result = compile(data, { strict: true });
+    const result = compile(data, { strict: true });
 
     assert(result.error instanceof Error);
   });
   it("error: Invalid data", () => {
-    let data = {
+    const data = {
       elements: [
         {
           address: "/invalid-data",
           args: [
-            [ () => {} ],
-          ],
-        },
-      ],
+            [ () => {} ]
+          ]
+        }
+      ]
     };
-    let result = compile(data, {});
+    const result = compile(data, {});
 
     assert(result.error instanceof Error);
   });

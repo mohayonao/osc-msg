@@ -1,7 +1,9 @@
-import Tag from "./Tag";
-import * as utils from "./utils";
+"use strict";
 
-export default function compile(object, opts) {
+const Tag = require("./Tag");
+const utils = require("./utils");
+
+function compile(object, opts) {
   if (object === null || typeof object !== "object" || Array.isArray(object)) {
     object = { args: [ object ] };
   }
@@ -14,12 +16,11 @@ export default function compile(object, opts) {
 }
 
 function compileBundle(object, opts) {
-  let timetag = Math.floor(object.timetag || 0);
-  let elements = utils.toArray(object.elements).map(element => compile(element, opts));
-  let bufferLength = 0;
-  let error = false;
-  let oscType = "bundle";
+  const timetag = Math.floor(object.timetag || 0);
+  const elements = utils.toArray(object.elements).map(element => compile(element, opts));
+  const oscType = "bundle";
 
+  let bufferLength = 0;
   // #bundle_
   bufferLength += 8;
   // timetag
@@ -28,7 +29,7 @@ function compileBundle(object, opts) {
   bufferLength += elements.length * 4;
   bufferLength += elements.reduce((bufferLength, element) => bufferLength + element.bufferLength, 0);
 
-  error = error || elements.reduce((error, element) => error || element.error, null);
+  const error = elements.reduce((error, element) => error || element.error, null);
 
   return { timetag, elements, bufferLength, oscType, error };
 }
@@ -37,14 +38,19 @@ function compileMessage(object, opts) {
   if (opts.strict && typeof object.address !== "string") {
     return {
       address: "", types: "", values: [], bufferLength: 0, oscType: "message",
-      error: new TypeError("OSC Message must contain an address"),
+      error: new TypeError("OSC Message must contain an address")
     };
   }
 
-  let address = utils.toString(object.address);
-  let args = utils.toArray(object.args).map(value => convertTypedValue(value, opts));
-  let { types, values, bufferLength, error } = build(args, opts);
-  let oscType = "message";
+  const address = utils.toString(object.address);
+  const args = utils.toArray(object.args).map(value => convertTypedValue(value, opts));
+  const items = build(args, opts);
+  const types = items.types;
+  const values = items.values;
+  const error = items.error;
+  const oscType = "message";
+
+  let bufferLength = items.bufferLength;
 
   bufferLength += utils.size4(address.length + 1);
   bufferLength += utils.size4(types.length + 2);
@@ -79,7 +85,8 @@ function convertTypedValue(value, opts) {
 }
 
 function build(args, opts) {
-  let values = [];
+  const values = [];
+
   let types = "";
   let bufferLength = 0;
   let error = null;
@@ -88,7 +95,7 @@ function build(args, opts) {
     let value = args[i];
 
     if (Tag.types.hasOwnProperty(value.type)) {
-      let type = Tag.types[value.type];
+      const type = Tag.types[value.type];
 
       if (opts.strict && !type.validate(value.value)) {
         error = new TypeError(`Invalid date: expected ${value.type}, but got ${JSON.stringify(value)}`);
@@ -100,12 +107,12 @@ function build(args, opts) {
       types += type.tag;
       bufferLength += type.size(value.value);
     } else if (value.type === "array") {
-      let item = build(value.value, opts);
+      const items = build(value.value, opts);
 
-      values.push(...item.values);
-      types += `[${item.types}]`;
-      bufferLength += item.bufferLength;
-      error = error || item.error;
+      values.push.apply(values, items.values);
+      types += `[${items.types}]`;
+      bufferLength += items.bufferLength;
+      error = error || items.error;
     } else {
       error = new TypeError(`Invalid data: ${value}`);
     }
@@ -117,3 +124,5 @@ function build(args, opts) {
 
   return { types, values, bufferLength, error };
 }
+
+module.exports = compile;
