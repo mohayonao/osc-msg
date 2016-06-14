@@ -17,7 +17,19 @@ function decode(buffer, opts) {
     return decodeBundle(buffer, opts);
   }
 
-  return decodeMessage(buffer, opts);
+  const msg = decodeMessage(buffer, opts);
+
+  if (opts.bundle) {
+    const bundle = { timetag: 0, elements: [ msg ], oscType: "bundle" };
+
+    if (msg.error) {
+      bundle.error = msg.error;
+    }
+
+    return bundle;
+  }
+
+  return msg;
 }
 
 function decodeBundle(buffer, opts) {

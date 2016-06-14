@@ -123,6 +123,24 @@ describe("decode(buffer: Buffer, opts = {}): object", () => {
       oscType: "message"
     });
   });
+  it("with bundle option", () => {
+    const buffer = new Buffer(flatten([
+      _s("/counter"), _s(",iiii"), _i(0), _i(1), _i(2), _i(3)
+    ]));
+    const result = decode(buffer, { bundle: true });
+
+    assert.deepEqual(result, {
+      timetag: 0,
+      elements: [
+        {
+          address: "/counter",
+          args: [ $i(0), $i(1), $i(2), $i(3) ],
+          oscType: "message"
+        }
+      ],
+      oscType: "bundle"
+    });
+  });
   it("with strip option", () => {
     const buffer = new Buffer(flatten([
       _s("/matrix"), _s(",[[fff][fff][fff]]"), _f(1), _f(0), _f(0), _f(0), _f(1), _f(0), _f(0), _f(0), _f(1)
