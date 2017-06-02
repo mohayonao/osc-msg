@@ -87,6 +87,8 @@ describe("utils", () => {
   });
   describe(".isTimetag", () => {
     it("(value: any): boolean", () => {
+      assert(utils.isTimetag([ 0, 1 ]) === true);
+      assert(utils.isTimetag([ 0 ]) === false);
       assert(utils.isTimetag(-1) === false);
       assert(utils.isTimetag(10) === true);
       assert(utils.isTimetag(4294967295) === true);
@@ -100,6 +102,7 @@ describe("utils", () => {
       assert(utils.isTimetag(undefined) === false);
       assert(utils.isTimetag(new Buffer(0)) === false);
       assert(utils.isTimetag(new Uint8Array(0).buffer) === false);
+      assert(utils.isTimetag(new Date()) === true);
     });
   });
   describe(".isString", () => {
@@ -164,6 +167,27 @@ describe("utils", () => {
       assert(utils.toBlob(4) instanceof Buffer);
       assert(utils.toBlob(4).length === 4);
       assert(utils.toBlob(null) instanceof Buffer);
+    });
+  });
+  describe(".toTimeTag(value: number[]): number[]", () => {
+    it("works", () => {
+      assert.deepEqual(utils.toTimeTag([ 2208988800, 0 ]), [ 2208988800, 0 ]);
+      assert.deepEqual(utils.toTimeTag([ 2208988800, 2147483648 ]), [ 2208988800, 2147483648 ]);
+    });
+  });
+  describe(".toTimeTag(value: number): number[]", () => {
+    it("works", () => {
+      assert.deepEqual(utils.toTimeTag(9487534653230285000), [ 2208988800, 0 ]);
+      assert.deepEqual(utils.toTimeTag(9487534655377768000), [ 2208988800, 2147483648 ]);
+    });
+  });
+  describe(".toTimeTag(value: Date): number[]", () => {
+    assert.deepEqual(utils.toTimeTag(new Date(0)), [ 2208988800, 0 ]);
+  });
+  describe(".toAddress(value: number|string): number|string", () => {
+    it("works", () => {
+      assert(utils.toAddress("/foo") === "/foo");
+      assert(utils.toAddress(100) === 100);
     });
   });
 });

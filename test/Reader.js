@@ -74,19 +74,6 @@ describe("Reader", () => {
       assert(reader.hasError() === true);
     });
   });
-  describe("#readInt64(): number", () => {
-    it("works", () => {
-      const reader = new Reader(new Buffer([
-        0x00, 0x00, 0x03, 0xe8,
-        0xff, 0xff, 0xff, 0xff
-      ]));
-
-      assert(reader.readInt64() === 4299262263295); // EOD
-      assert(reader.hasError() === false);
-      assert(reader.readInt64() === 0);
-      assert(reader.hasError() === true);
-    });
-  });
   describe("#readFloat32(): number", () => {
     it("works", () => {
       const reader = new Reader(new Buffer([
@@ -101,7 +88,6 @@ describe("Reader", () => {
       assert(reader.hasError() === true);
     });
   });
-
   describe("#readFloat64(): number", () => {
     it("works", () => {
       const reader = new Reader(new Buffer([
@@ -152,6 +138,45 @@ describe("Reader", () => {
       assert.deepEqual(reader.readBlob(), new Buffer(0)); // EOD
       assert(reader.hasError() === true);
       assert.deepEqual(reader.readBlob(), new Buffer(0));
+    });
+  });
+  describe("#readAddress(): string", () => {
+    it("works", () => {
+      const reader = new Reader(new Buffer([
+        0x2f, 0x66, 0x6f, 0x6f, // "/foo"
+        0x00, 0x00, 0x00, 0x00,
+      ]));
+
+      assert(reader.readAddress() === "/foo");
+      assert(reader.hasError() === false);
+      assert(reader.readAddress() === "");
+      assert(reader.hasError() === true);
+    });
+  });
+  describe("#readAddress(): number", () => {
+    // It isn't the OSC spec, but SuperCollider allows numeric address.
+    it("number", () => {
+      const reader = new Reader(new Buffer([
+        0x00, 0x00, 0x00, 0x01, // uint32 1
+      ]));
+
+      assert(reader.readAddress() === 1);
+      assert(reader.hasError() === false);
+      assert(reader.readAddress() === "");
+      assert(reader.hasError() === true);
+    });
+  });
+  describe("#readTimeTag(): [ number, number ]", () => {
+    it("works", () => {
+      const reader = new Reader(new Buffer([
+        0x83, 0xaa, 0x7e, 0x80, // uint32 2208988800
+        0x80, 0x00, 0x00, 0x00, // uint32 2147483648
+      ]));
+
+      assert.deepEqual(reader.readTimeTag(), [ 2208988800, 2147483648 ]);
+      assert(reader.hasError() === false);
+      assert.deepEqual(reader.readTimeTag(), [ 0, 0 ]);
+      assert(reader.hasError() === true);
     });
   });
   describe("#hasError(): boolean", () => {

@@ -24,6 +24,12 @@ function isDouble(value) {
 }
 
 function isTimetag(value) {
+  if (Array.isArray(value)) {
+    return value.length === 2 && isInteger(value[0]) && isInteger(value[1]);
+  }
+  if (value instanceof Date) {
+    return true;
+  }
   return typeof value === "number" && value >= 0 && value % 1 === 0;
 }
 
@@ -84,6 +90,45 @@ function toBlob(value) {
   return new Buffer2(0);
 }
 
+function toAddress(value) {
+  if (typeof value === "number") {
+    return value >>> 0;
+  }
+  return toString(value);
+}
+
+function toTimeTag(value) {
+  if (Array.isArray(value)) {
+    return toTimeTagFromArray(value);
+  }
+  if (value instanceof Date) {
+    return toTimeTagFromDate(value);
+  }
+  return toTimeTagFromNumber(value);
+}
+
+function toTimeTagFromArray([ hi, lo ]) {
+  hi >>>= 0;
+  lo >>>= 0;
+
+  return [ hi, lo ];
+}
+
+function toTimeTagFromDate(value) {
+  const time = (value / 1000) + 2208988800;
+  const hi = time >>> 0;
+  const lo = ((time - hi) * 4294967296) >>> 0;
+
+  return [ hi, lo ];
+}
+
+function toTimeTagFromNumber(value) {
+  const hi = (value / 4294967296) >>> 0;
+  const lo = (value % 4294967296) >>> 0;
+
+  return [ hi, lo ];
+}
+
 module.exports = {
-  size4, isNone, isInteger, isFloat, isDouble, isTimetag, isString, isBlob, toString, toArray, toBlob
+  size4, isNone, isInteger, isFloat, isDouble, isTimetag, isString, isBlob, toString, toArray, toBlob, toAddress, toTimeTag
 };

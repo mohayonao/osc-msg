@@ -3,8 +3,6 @@
 const DataView2 = require("dataview2").DataView2;
 const Buffer2 = require("dataview2").Buffer2;
 
-const TWO_TO_THE_32 = Math.pow(2, 32);
-
 class Reader {
   constructor(buffer) {
     this.view = new DataView2(buffer);
@@ -69,13 +67,6 @@ class Reader {
     return 0;
   }
 
-  readInt64() {
-    const hi = this.readUInt32();
-    const lo = this.readUInt32();
-
-    return hi * TWO_TO_THE_32 + lo;
-  }
-
   readFloat32() {
     this._index += 4;
 
@@ -123,6 +114,19 @@ class Reader {
     this._align();
 
     return buffer;
+  }
+
+  readAddress() {
+    if (this._index < this.view.byteLength) {
+      if (this.view.getUint8(this._index) == 0) {
+        return this.readUInt32();
+      }
+    }
+    return this.readString();
+  }
+
+  readTimeTag() {
+    return [ this.readUInt32(), this.readUInt32() ];
   }
 
   hasError() {

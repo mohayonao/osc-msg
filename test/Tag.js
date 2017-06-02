@@ -95,8 +95,6 @@ describe("Tag", () => {
   });
   describe('["timetag"]', () => {
     it("works", () => {
-      const now = Date.now();
-
       assert(types["timetag"].tag === "t");
       assert(types["timetag"].size() === 8);
       assert(types["timetag"].validate(0) === true);
@@ -104,14 +102,17 @@ describe("Tag", () => {
       assert(types["timetag"].validate(1.5) === false);
       assert(types["timetag"].validate(Infinity) === false);
       assert(types["timetag"].validate(NaN) === false);
-      assert(types["timetag"].valueOf(0) === 0);
-      assert(types["timetag"].valueOf(Math.PI) === 3);
-      assert(types["timetag"].valueOf(Infinity) === Infinity);
-      assert(types["timetag"].valueOf("3") === 3);
-      assert(types["timetag"].valueOf(NaN) === 0);
+      assert.deepEqual(types["timetag"].valueOf(0), [ 0, 0 ]);
+      assert.deepEqual(types["timetag"].valueOf(Math.PI), [ 0, 3 ]);
+      assert.deepEqual(types["timetag"].valueOf(Infinity), [ 0, 0 ]);
+      assert.deepEqual(types["timetag"].valueOf("3"), [ 0, 3 ]);
+      assert.deepEqual(types["timetag"].valueOf(NaN), [ 0, 0 ]);
+      assert.deepEqual(types["timetag"].valueOf(9487534655377768000), [ 2208988800, 2147483648 ]);
+      assert.deepEqual(types["timetag"].valueOf([ 2208988800, 0 ]), [ 2208988800, 0 ]);
+      assert.deepEqual(types["timetag"].valueOf([ 2208988800, 2147483648 ]), [ 2208988800, 2147483648 ]);
 
-      types["timetag"].write(writer, now);
-      assert(types["timetag"].read(reader) === now);
+      types["timetag"].write(writer, [ 2208988800, 2147483648 ]);
+      assert.deepEqual(types["timetag"].read(reader), [ 2208988800, 2147483648 ]);
 
       assert(tags["t"] === types["timetag"]);
     });

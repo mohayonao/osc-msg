@@ -1,7 +1,7 @@
 # osc-msg
-[![Build Status](http://img.shields.io/travis/mohayonao/osc-msg.svg?style=flat-square)](https://travis-ci.org/mohayonao/osc-msg)
-[![NPM Version](http://img.shields.io/npm/v/osc-msg.svg?style=flat-square)](https://www.npmjs.org/package/osc-msg)
-[![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](http://mohayonao.mit-license.org/)
+[![Build Status](https://img.shields.io/travis/mohayonao/osc-msg.svg?style=flat-square)](https://travis-ci.org/mohayonao/osc-msg)
+[![NPM Version](https://img.shields.io/npm/v/osc-msg.svg?style=flat-square)](https://www.npmjs.org/package/osc-msg)
+[![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://mohayonao.mit-license.org/)
 
 > OSC message decoder/encoder with fault tolerant
 
@@ -106,7 +106,7 @@ Where the `type` is one of the following:
   - `false` - value is boolean false
   - `null` - no value
   - `bang` - no value (this is the `I` type tag)
-  - `timetag` - numeric value
+  - `timetag` - [ uint32, uint32 ]
   - `array` - array of OSC Arguments
 
 - OSC Bundle
@@ -122,7 +122,7 @@ Where the `type` is one of the following:
 Where the timetag is a javascript-native numeric value of the timetag, and elements is an array of either an OSC Bundle or an OSC Message The `oscType` field is optional, but is always returned by api functions.
 
 ## See also
-- [The Open Sound Control 1.0 Specification](http://opensoundcontrol.org/spec-1_0)
+- [The Open Sound Control 1.0 Specification](https://opensoundcontrol.org/spec-1_0)
 - [osc-min / Javascript representations of the OSC types](https://github.com/russellmcc/node-osc-min#javascript-representations-of-the-osc-types)
 
 ## License

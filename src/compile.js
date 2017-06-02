@@ -16,7 +16,7 @@ function compile(object, opts) {
 }
 
 function compileBundle(object, opts) {
-  const timetag = Math.floor(object.timetag || 0);
+  const timetag = utils.toTimeTag(object.timetag);
   const elements = utils.toArray(object.elements).map(element => compile(element, opts));
   const oscType = "bundle";
 
@@ -42,7 +42,7 @@ function compileMessage(object, opts) {
     };
   }
 
-  const address = utils.toString(object.address);
+  const address = utils.toAddress(object.address);
   const args = utils.toArray(object.args).map(value => convertTypedValue(value, opts));
   const items = build(args, opts);
   const types = items.types;
@@ -52,7 +52,11 @@ function compileMessage(object, opts) {
 
   let bufferLength = items.bufferLength;
 
-  bufferLength += utils.size4(address.length + 1);
+  if (typeof address === "number") {
+    bufferLength += 4;
+  } else {
+    bufferLength += utils.size4(address.length + 1);
+  }
   bufferLength += utils.size4(types.length + 2);
 
   return { address, types, values, bufferLength, oscType, error };
@@ -79,6 +83,10 @@ function convertTypedValue(value, opts) {
 
   if (Array.isArray(value)) {
     return { type: "array", value: value.map(value => convertTypedValue(value, opts)) };
+  }
+
+  if (value instanceof Date) {
+    return { type: "timetag", value: utils.toTimeTagFromDate(value) };
   }
 
   return value;

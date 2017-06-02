@@ -43,7 +43,7 @@ describe("decode(buffer: Buffer, opts = {}): object", () => {
   it("#bundle{}", () => {
     const buffer = new Buffer("#bundle");
     const result = decode(buffer);
-    const expected = { timetag: 0, elements: [], oscType: "bundle" };
+    const expected = { timetag: [ 0, 0 ], elements: [], oscType: "bundle" };
 
     assert.deepEqual(result, expected);
   });
@@ -54,7 +54,7 @@ describe("decode(buffer: Buffer, opts = {}): object", () => {
     const result = decode(buffer);
 
     assert.deepEqual(result, {
-      timetag: 1,
+      timetag: [ 0, 1 ],
       elements: [
         { address: "/foo", args: [], oscType: "message" },
         { address: "/bar", args: [], oscType: "message" }
@@ -70,12 +70,12 @@ describe("decode(buffer: Buffer, opts = {}): object", () => {
     const result = decode(buffer);
 
     assert.deepEqual(result, {
-      timetag: 1,
+      timetag: [ 0, 1 ],
       elements: [
         { address: "/foo", args: [], oscType: "message" },
         { address: "/bar", args: [], oscType: "message" },
         {
-          timetag: 2,
+          timetag: [ 0, 2 ],
           elements: [
             { address: "/baz", args: [], oscType: "message" },
             { address: "/qux", args: [], oscType: "message" }
@@ -130,7 +130,7 @@ describe("decode(buffer: Buffer, opts = {}): object", () => {
     const result = decode(buffer, { bundle: true });
 
     assert.deepEqual(result, {
-      timetag: 0,
+      timetag: [ 0, 0 ],
       elements: [
         {
           address: "/counter",

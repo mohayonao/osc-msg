@@ -20,7 +20,7 @@ function decode(buffer, opts) {
   const msg = decodeMessage(buffer, opts);
 
   if (opts.bundle) {
-    const bundle = { timetag: 0, elements: [ msg ], oscType: "bundle" };
+    const bundle = { timetag: [ 0, 0 ], elements: [ msg ], oscType: "bundle" };
 
     if (msg.error) {
       bundle.error = msg.error;
@@ -38,7 +38,7 @@ function decodeBundle(buffer, opts) {
   // read '#bundle'
   reader.readString();
 
-  const timetag = reader.readInt64();
+  const timetag = reader.readTimeTag();
   const elements = [];
   const oscType = "bundle";
 
@@ -75,7 +75,7 @@ function decodeBundle(buffer, opts) {
 
 function decodeMessage(buffer, opts) {
   const reader = new Reader(buffer);
-  const address = reader.readString();
+  const address = reader.readAddress();
   const tags = reader.readString();
   const oscType = "message";
 

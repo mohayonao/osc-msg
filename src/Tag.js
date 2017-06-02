@@ -55,11 +55,11 @@ const tags = {};
     tag: "t",
     size: () => 8,
     validate: utils.isTimetag,
-    valueOf: value => Math.floor(+value) || 0,
+    valueOf: utils.toTimeTag,
     write(writer, value) {
-      writer.writeInt64(value);
+      writer.writeTimeTag(value);
     },
-    read: reader => reader.readInt64()
+    read: reader => reader.readTimeTag()
   },
   {
     type: "double",

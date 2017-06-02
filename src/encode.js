@@ -28,7 +28,7 @@ function encode(object, opts) {
 
 function encodeBundle(writer, object) {
   writer.writeString("#bundle");
-  writer.writeInt64(object.timetag);
+  writer.writeTimeTag(object.timetag);
 
   object.elements.forEach((element) => {
     writer.writeUInt32(element.bufferLength);
@@ -42,7 +42,7 @@ function encodeBundle(writer, object) {
 }
 
 function encodeMessage(writer, object) {
-  writer.writeString(object.address);
+  writer.writeAddress(object.address);
   writer.writeString("," + object.types);
 
   object.values.forEach((items) => {
