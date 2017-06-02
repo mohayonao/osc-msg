@@ -16,7 +16,7 @@ function compile(object, opts) {
 }
 
 function compileBundle(object, opts) {
-  const timetag = Math.floor(object.timetag || 0);
+  const timetag = utils.toTimeTag(object.timetag);
   const elements = utils.toArray(object.elements).map(element => compile(element, opts));
   const oscType = "bundle";
 
@@ -83,6 +83,10 @@ function convertTypedValue(value, opts) {
 
   if (Array.isArray(value)) {
     return { type: "array", value: value.map(value => convertTypedValue(value, opts)) };
+  }
+
+  if (value instanceof Date) {
+    return { type: "timetag", value: utils.toTimeTagFromDate(value) };
   }
 
   return value;

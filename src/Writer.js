@@ -2,8 +2,6 @@
 
 const DataView2 = require("dataview2").DataView2;
 
-const TWO_TO_THE_32 = Math.pow(2, 32);
-
 class Writer {
   constructor(buffer) {
     this.view = new DataView2(buffer);
@@ -40,14 +38,6 @@ class Writer {
     } else {
       this._hasError = true;
     }
-  }
-
-  writeInt64(value) {
-    const hi = (value / TWO_TO_THE_32) >>> 0;
-    const lo = value >>> 0;
-
-    this.writeUInt32(hi);
-    this.writeUInt32(lo);
   }
 
   writeFloat32(value) {
@@ -98,6 +88,11 @@ class Writer {
     } else {
       this.writeString("" + value);
     }
+  }
+
+  writeTimeTag([ hi, lo ]) {
+    this.writeUInt32(hi);
+    this.writeUInt32(lo);
   }
 
   hasError() {

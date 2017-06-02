@@ -191,6 +191,20 @@ describe("Writer", () => {
       assert(writer.view.getUint32(0) === 1);
     });
   });
+  describe("writeTimeTag(value: [ hi, lo ]): void", () => {
+    it("works", () => {
+      const buffer = new Uint8Array(8).buffer;
+      const writer = new Writer(buffer);
+
+      writer.writeTimeTag([ 2208988800, 2147483648 ]);
+      assert(writer.hasError() === false);
+      writer.writeTimeTag([ 2208988800, 0 ]);
+      assert(writer.hasError() === true);
+
+      assert(writer.view.getUint32(0) === 2208988800);
+      assert(writer.view.getUint32(4) === 2147483648);
+    });
+  });
   describe("#hasNext(): boolean", () => {
     it("works", () => {
       const buffer = new Uint8Array(4).buffer;

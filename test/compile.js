@@ -71,11 +71,10 @@ describe("compile(object: object, opts: object): object", () => {
     });
   });
   it("/complex", () => {
-    const now = Date.now();
     const data = {
       elements: [
         {
-          timetag: now,
+          timetag: 9487534655377768000,
           elements: [
             {
               address: "/complex",
@@ -88,10 +87,10 @@ describe("compile(object: object, opts: object): object", () => {
     const result = compile(data, {});
 
     assert.deepEqual(result, {
-      timetag: 0,
+      timetag: [ 0, 0 ],
       elements: [
         {
-          timetag: now,
+          timetag: [ 2208988800, 2147483648 ],
           elements: [
             {
               address: "/complex",

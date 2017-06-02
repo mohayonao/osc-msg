@@ -41,20 +41,9 @@ function $a(value) {
 }
 
 describe("compatibility with osc-min", () => {
-  it("#bundle{}", () => {
-    const object = {
-      elements: []
-    };
-    const buffer = new Buffer(flatten([
-      _s("#bundle"), _t(0)
-    ]));
-
-    assert.deepEqual(oscmsg.toBuffer(object), oscmin.toBuffer(object));
-    assert.deepEqual(oscmsg.fromBuffer(buffer), oscmin.fromBuffer(buffer));
-  });
   it("#bundle{ /foo /bar }", () => {
     const object = {
-      timetag: 1,
+      timetag: [ 0, 1 ],
       elements: [
         { address: "/foo", args: [] },
         { address: "/bar", args: [] }
@@ -69,12 +58,12 @@ describe("compatibility with osc-min", () => {
   });
   it("#bundle{ /foo /bar #bundle{ /baz /qux } }", () => {
     const object = {
-      timetag: 1,
+      timetag: [ 0, 1 ],
       elements: [
         { address: "/foo", args: [] },
         { address: "/bar", args: [] },
         {
-          timetag: 2,
+          timetag: [ 0, 2 ],
           elements: [
             { address: "/baz", args: [] },
             { address: "/qux", args: [] }
