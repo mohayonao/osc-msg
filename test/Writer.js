@@ -157,6 +157,40 @@ describe("Writer", () => {
       assert(writer.view.getUint8(29) === 0x00);
     });
   });
+  describe("writeAddress(value: string): void", () => {
+    it("works", () => {
+      const buffer = new Uint8Array(8).buffer;
+      const writer = new Writer(buffer);
+
+      writer.writeString("/foo");
+      assert(writer.hasError() === false);
+      writer.writeString("/bar");
+      assert(writer.hasError() === true);
+
+      assert(writer.view.getUint8(0) === 0x2f); // "/foo"
+      assert(writer.view.getUint8(1) === 0x66);
+      assert(writer.view.getUint8(2) === 0x6f);
+      assert(writer.view.getUint8(3) === 0x6f);
+      assert(writer.view.getUint8(4) === 0x00);
+      assert(writer.view.getUint8(5) === 0x00);
+      assert(writer.view.getUint8(6) === 0x00);
+      assert(writer.view.getUint8(7) === 0x00);
+    });
+  });
+  describe("writeAddress(value: number): void", () => {
+    // It isn't the OSC spec, but SuperCollider allows numeric address.
+    it("works", () => {
+      const buffer = new Uint8Array(4).buffer;
+      const writer = new Writer(buffer);
+
+      writer.writeAddress(1);
+      assert(writer.hasError() === false);
+      writer.writeAddress(2);
+      assert(writer.hasError() === true);
+
+      assert(writer.view.getUint32(0) === 1);
+    });
+  });
   describe("#hasNext(): boolean", () => {
     it("works", () => {
       const buffer = new Uint8Array(4).buffer;

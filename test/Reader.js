@@ -101,7 +101,6 @@ describe("Reader", () => {
       assert(reader.hasError() === true);
     });
   });
-
   describe("#readFloat64(): number", () => {
     it("works", () => {
       const reader = new Reader(new Buffer([
@@ -152,6 +151,32 @@ describe("Reader", () => {
       assert.deepEqual(reader.readBlob(), new Buffer(0)); // EOD
       assert(reader.hasError() === true);
       assert.deepEqual(reader.readBlob(), new Buffer(0));
+    });
+  });
+  describe("#readAddress(): string", () => {
+    it("works", () => {
+      const reader = new Reader(new Buffer([
+        0x2f, 0x66, 0x6f, 0x6f, // "/foo"
+        0x00, 0x00, 0x00, 0x00,
+      ]));
+
+      assert(reader.readAddress() === "/foo");
+      assert(reader.hasError() === false);
+      assert(reader.readAddress() === "");
+      assert(reader.hasError() === true);
+    });
+  });
+  describe("#readAddress(): number", () => {
+    // It isn't the OSC spec, but SuperCollider allows numeric address.
+    it("number", () => {
+      const reader = new Reader(new Buffer([
+        0x00, 0x00, 0x00, 0x01, // uint32 1
+      ]));
+
+      assert(reader.readAddress() === 1);
+      assert(reader.hasError() === false);
+      assert(reader.readAddress() === "");
+      assert(reader.hasError() === true);
     });
   });
   describe("#hasError(): boolean", () => {

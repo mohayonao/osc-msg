@@ -125,6 +125,15 @@ class Reader {
     return buffer;
   }
 
+  readAddress() {
+    if (this._index < this.view.byteLength) {
+      if (this.view.getUint8(this._index) == 0) {
+        return this.readUInt32();
+      }
+    }
+    return this.readString();
+  }
+
   hasError() {
     return this._hasError;
   }

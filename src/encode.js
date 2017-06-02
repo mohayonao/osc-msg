@@ -42,7 +42,7 @@ function encodeBundle(writer, object) {
 }
 
 function encodeMessage(writer, object) {
-  writer.writeString(object.address);
+  writer.writeAddress(object.address);
   writer.writeString("," + object.types);
 
   object.values.forEach((items) => {

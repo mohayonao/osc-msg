@@ -84,6 +84,13 @@ function toBlob(value) {
   return new Buffer2(0);
 }
 
+function toAddress(value) {
+  if (typeof value === "number") {
+    return value >>> 0;
+  }
+  return toString(value);
+}
+
 module.exports = {
-  size4, isNone, isInteger, isFloat, isDouble, isTimetag, isString, isBlob, toString, toArray, toBlob
+  size4, isNone, isInteger, isFloat, isDouble, isTimetag, isString, isBlob, toString, toArray, toBlob, toAddress
 };

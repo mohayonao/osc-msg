@@ -75,7 +75,7 @@ function decodeBundle(buffer, opts) {
 
 function decodeMessage(buffer, opts) {
   const reader = new Reader(buffer);
-  const address = reader.readString();
+  const address = reader.readAddress();
   const tags = reader.readString();
   const oscType = "message";
 

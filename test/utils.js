@@ -166,4 +166,10 @@ describe("utils", () => {
       assert(utils.toBlob(null) instanceof Buffer);
     });
   });
+  describe(".toAddress(value: number|string): number|string", () => {
+    it("works", () => {
+      assert(utils.toAddress("/foo") === "/foo");
+      assert(utils.toAddress(100) === 100);
+    });
+  });
 });

@@ -92,6 +92,14 @@ class Writer {
     this._align();
   }
 
+  writeAddress(value) {
+    if (typeof value === "number") {
+      this.writeUInt32(value);
+    } else {
+      this.writeString("" + value);
+    }
+  }
+
   hasError() {
     return this._hasError;
   }
