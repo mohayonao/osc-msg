@@ -54,7 +54,7 @@ const tags = {};
     type: "timetag",
     tag: "t",
     size: () => 8,
-    validate: utils.isTimetag,
+    validate: utils.isTimeTag,
     valueOf: utils.toTimeTag,
     write(writer, value) {
       writer.writeTimeTag(value);

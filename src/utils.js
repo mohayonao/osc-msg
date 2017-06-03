@@ -23,7 +23,7 @@ function isDouble(value) {
   return !isNaN(value) && typeof value === "number";
 }
 
-function isTimetag(value) {
+function isTimeTag(value) {
   if (Array.isArray(value)) {
     return value.length === 2 && isInteger(value[0]) && isInteger(value[1]);
   }
@@ -130,5 +130,5 @@ function toTimeTagFromNumber(value) {
 }
 
 module.exports = {
-  size4, isNone, isInteger, isFloat, isDouble, isTimetag, isString, isBlob, toString, toArray, toBlob, toAddress, toTimeTag
+  size4, isNone, isInteger, isFloat, isDouble, isTimeTag, isString, isBlob, toString, toArray, toBlob, toAddress, toTimeTag
 };
