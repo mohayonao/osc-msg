@@ -111,6 +111,20 @@ describe("compile(object: object, opts: object): object", () => {
       error: null
     });
   });
+  it("empty bundle", () => {
+    const data = {
+      timetag: [ 2208988800, 2147483648 ]
+    };
+    const result = compile(data, {});
+
+    assert.deepEqual(result, {
+      timetag: [ 2208988800, 2147483648 ],
+      elements: [],
+      bufferLength: 16,
+      oscType: "bundle",
+      error: null
+    });
+  });
   it("with integer option", () => {
     const data = {
       address: "/matrix",

@@ -8,7 +8,7 @@ function compile(object, opts) {
     object = { args: [ object ] };
   }
 
-  if (Array.isArray(object.elements) || typeof object.timetag === "number") {
+  if (Array.isArray(object.elements) || utils.isTimeTag(object.timetag)) {
     return compileBundle(object, opts);
   }
 
