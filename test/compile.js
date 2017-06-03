@@ -47,7 +47,7 @@ describe("compile(object: object, opts: object): object", () => {
 
     assert.deepEqual(result, {
       address: "",
-      types: "[iii]",
+      types: "iii",
       values: [ $i(1), $i(2), $i(3) ],
       bufferLength: 24,
       oscType: "message",
@@ -107,6 +107,20 @@ describe("compile(object: object, opts: object): object", () => {
         }
       ],
       bufferLength: 64,
+      oscType: "bundle",
+      error: null
+    });
+  });
+  it("empty bundle", () => {
+    const data = {
+      timetag: [ 2208988800, 2147483648 ]
+    };
+    const result = compile(data, {});
+
+    assert.deepEqual(result, {
+      timetag: [ 2208988800, 2147483648 ],
+      elements: [],
+      bufferLength: 16,
       oscType: "bundle",
       error: null
     });

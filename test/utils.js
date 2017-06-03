@@ -85,24 +85,24 @@ describe("utils", () => {
       assert(utils.isDouble(new Uint8Array(0).buffer) === false);
     });
   });
-  describe(".isTimetag", () => {
+  describe(".isTimeTag", () => {
     it("(value: any): boolean", () => {
-      assert(utils.isTimetag([ 0, 1 ]) === true);
-      assert(utils.isTimetag([ 0 ]) === false);
-      assert(utils.isTimetag(-1) === false);
-      assert(utils.isTimetag(10) === true);
-      assert(utils.isTimetag(4294967295) === true);
-      assert(utils.isTimetag(1.5) === false);
-      assert(utils.isTimetag(Infinity) === false);
-      assert(utils.isTimetag(NaN) === false);
-      assert(utils.isTimetag(true) === false);
-      assert(utils.isTimetag(false) === false);
-      assert(utils.isTimetag(null) === false);
-      assert(utils.isTimetag("0") === false);
-      assert(utils.isTimetag(undefined) === false);
-      assert(utils.isTimetag(new Buffer(0)) === false);
-      assert(utils.isTimetag(new Uint8Array(0).buffer) === false);
-      assert(utils.isTimetag(new Date()) === true);
+      assert(utils.isTimeTag([ 0, 1 ]) === true);
+      assert(utils.isTimeTag([ 0 ]) === false);
+      assert(utils.isTimeTag(-1) === false);
+      assert(utils.isTimeTag(10) === true);
+      assert(utils.isTimeTag(4294967295) === true);
+      assert(utils.isTimeTag(1.5) === false);
+      assert(utils.isTimeTag(Infinity) === false);
+      assert(utils.isTimeTag(NaN) === false);
+      assert(utils.isTimeTag(true) === false);
+      assert(utils.isTimeTag(false) === false);
+      assert(utils.isTimeTag(null) === false);
+      assert(utils.isTimeTag("0") === false);
+      assert(utils.isTimeTag(undefined) === false);
+      assert(utils.isTimeTag(new Buffer(0)) === false);
+      assert(utils.isTimeTag(new Uint8Array(0).buffer) === false);
+      assert(utils.isTimeTag(new Date()) === true);
     });
   });
   describe(".isString", () => {

@@ -4,11 +4,13 @@ const Tag = require("./Tag");
 const utils = require("./utils");
 
 function compile(object, opts) {
-  if (object === null || typeof object !== "object" || Array.isArray(object)) {
+  if (object === null || typeof object !== "object") {
     object = { args: [ object ] };
   }
-
-  if (Array.isArray(object.elements) || typeof object.timetag === "number") {
+  if (Array.isArray(object)) {
+    object = { args: object };
+  }
+  if (Array.isArray(object.elements) || utils.isTimeTag(object.timetag)) {
     return compileBundle(object, opts);
   }
 
