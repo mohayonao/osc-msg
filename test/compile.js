@@ -47,7 +47,7 @@ describe("compile(object: object, opts: object): object", () => {
 
     assert.deepEqual(result, {
       address: "",
-      types: "[iii]",
+      types: "iii",
       values: [ $i(1), $i(2), $i(3) ],
       bufferLength: 24,
       oscType: "message",
