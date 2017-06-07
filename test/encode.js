@@ -3,6 +3,7 @@
 const assert = require("power-assert");
 const flatten = require("lodash.flatten");
 const encode = require("../src/encode");
+const decode = require("../src/decode");
 
 function _i(value) {
   return Array.from(new Uint8Array(new Int32Array([ value ]).buffer)).reverse();
@@ -88,6 +89,37 @@ describe("encode(object: object, opts = {}): Buffer", () => {
     ]));
 
     assert.deepEqual(result, expected);
+  });
+  it("#bundle { bytes }", () => {
+    const msg1 = {
+      address: "/msg1",
+      args: [
+        { type: "integer", value: 1 },
+        { type: "integer", value: 2 },
+      ],
+      oscType: "message"
+    };
+    const msg2 = {
+      address: "/msg2",
+      args: [
+        { type: "integer", value: 3 },
+        { type: "integer", value: 4 },
+      ],
+      oscType: "message"
+    };
+    const object = {
+      timetag: [ 0, 0 ],
+      elements: [ encode(msg1), encode(msg2) ]
+    };
+
+    const result = encode(object);
+    const revert = decode(result);
+
+    assert.deepEqual(revert, {
+      timetag: [ 0, 0 ],
+      elements: [ msg1, msg2 ],
+      oscType: "bundle"
+    });
   });
   it("/address", () => {
     const object = {
