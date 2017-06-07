@@ -13,13 +13,17 @@ function compile(object, opts) {
   if (Array.isArray(object.elements) || utils.isTimeTag(object.timetag)) {
     return compileBundle(object, opts);
   }
-
   return compileMessage(object, opts);
 }
 
 function compileBundle(object, opts) {
   const timetag = utils.toTimeTag(object.timetag);
-  const elements = utils.toArray(object.elements).map(element => compile(element, opts));
+  const elements = utils.toArray(object.elements).map((element) => {
+    if (utils.isBlob(element)) {
+      return compileRawData(element);
+    }
+    return compile(element, opts);
+  });
   const oscType = "bundle";
 
   let bufferLength = 0;
@@ -34,6 +38,13 @@ function compileBundle(object, opts) {
   const error = elements.reduce((error, element) => error || element.error, null);
 
   return { timetag, elements, bufferLength, oscType, error };
+}
+
+function compileRawData(buffer) {
+  const oscType = "<DATA>";
+  const bufferLength = buffer.length || buffer.byteLength;
+
+  return { buffer, bufferLength, oscType };
 }
 
 function compileMessage(object, opts) {

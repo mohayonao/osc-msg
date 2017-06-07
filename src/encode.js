@@ -33,12 +33,18 @@ function encodeBundle(writer, object) {
   object.elements.forEach((element) => {
     writer.writeUInt32(element.bufferLength);
 
-    if (element.oscType === "bundle") {
+    if (element.oscType === "<DATA>") {
+      encodeRawData(writer, element);
+    } else if (element.oscType === "bundle") {
       encodeBundle(writer, element);
     } else {
       encodeMessage(writer, element);
     }
   });
+}
+
+function encodeRawData(writer, element) {
+  writer.writeRawData(element.buffer, element.bufferLength);
 }
 
 function encodeMessage(writer, object) {

@@ -95,6 +95,16 @@ class Writer {
     this.writeUInt32(lo);
   }
 
+  writeRawData(buffer, length) {
+    if (this._index + length <= this.view.byteLength) {
+      for (let i = 0; i < length; i++) {
+        this.view.setUint8(this._index++, buffer[i]);
+      }
+    } else {
+      this._hasError = true;
+    }
+  }
+
   hasError() {
     return this._hasError;
   }
