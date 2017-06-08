@@ -138,7 +138,7 @@ class Reader {
   }
 
   _align() {
-    while (this.hasNext() && this._index % 4 !== 0 && this.view.getUint8(this._index) === 0x00) {
+    while (this.hasNext() && this._index % 4 !== 0) {
       this._index += 1;
     }
   }
