@@ -54,6 +54,6 @@
     "preversion": "npm-run-all clean lint test",
     "test": "mocha --require babel-register",
     "travis": "npm-run-all lint mocha",
-    "version": "npm run build && git add -A build"
+    "version": "npm run build"
   }
 }
