@@ -15,6 +15,10 @@ function $s(value) {
   return { type: "string", value: value };
 }
 
+function $b(value) {
+  return { type: "blob", value: value };
+}
+
 function $T() {
   return { type: "true", value: true };
 }
@@ -49,6 +53,21 @@ describe("compile(object: object, opts: object): object", () => {
       address: "",
       types: "iii",
       values: [ $i(1), $i(2), $i(3) ],
+      bufferLength: 24,
+      oscType: "message",
+      error: null
+    });
+  });
+  it("blob", () => {
+    const buf1 = Buffer.from([ 1, 2, 3, 4 ]);
+    const buf2 = new Uint8Array([ 5, 6, 7, 8 ]).buffer;
+    const data = [ buf1, buf2 ];
+    const result = compile(data, {});
+
+    assert.deepEqual(result, {
+      address: "",
+      types: "bb",
+      values: [ $b(buf1), $b(buf2) ],
       bufferLength: 24,
       oscType: "message",
       error: null

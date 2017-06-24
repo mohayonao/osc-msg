@@ -144,6 +144,20 @@ describe("encode(object: object, opts = {}): Buffer", () => {
 
     assert.deepEqual(result, expected);
   });
+  it("/blob buf1 buf2", () => {
+    const buf1 = Buffer.from([ 1, 2, 3, 4 ]);
+    const buf2 = new Uint8Array([ 5, 6, 7, 8 ]).buffer;
+    const object = {
+      address: "/blob",
+      args: [ buf1, buf2 ],
+    };
+    const result = encode(object);
+    const expected = new Buffer(flatten([
+      _s("/blob"), _s(",bb"), _i(4), [ 1, 2, 3, 4 ], _i(4), [ 5, 6, 7, 8 ]
+    ]));
+
+    assert.deepEqual(result, expected);
+  });
   it("/matrix [ [ 1. 0. 0. ] [ 0. 1. 0. ] [ 0. 0. 1. ] ]", () => {
     const object = {
       address: "/matrix",
