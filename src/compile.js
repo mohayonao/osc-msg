@@ -98,6 +98,10 @@ function convertTypedValue(value, opts) {
     return { type: "array", value: value.map(value => convertTypedValue(value, opts)) };
   }
 
+  if (utils.isBlob(value)) {
+    return { type: "blob", value };
+  }
+
   if (value instanceof Date) {
     return { type: "timetag", value: utils.toTimeTagFromDate(value) };
   }
